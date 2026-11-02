@@ -1,0 +1,40 @@
+:root {
+  /* Brand palette */
+  --color-forest-950: #0e2722;
+  --color-forest-900: #173c34;
+  --color-forest-700: #255248;
+  --color-sage-100: #dfe8dc;
+  --color-sand-100: #f7f3eb;
+  --color-paper: #fffdf9;
+  --color-coral-500: #d8755b;
+  --color-coral-600: #c46248;
+  --color-ink: #1b332d;
+  --color-muted: #6d7a70;
+  --color-white: #ffffff;
+  --color-whatsapp: #25d366;
+
+  /* Semantic colors */
+  --surface-page: var(--color-sand-100);
+  --surface-raised: var(--color-paper);
+  --surface-brand: var(--color-forest-900);
+  --surface-accent: var(--color-coral-500);
+  --content-primary: var(--color-ink);
+  --content-muted: var(--color-muted);
+  --border-subtle: rgba(27, 51, 45, 0.16);
+
+  /* Typography */
+  --font-display: "DM Serif Display", Georgia, serif;
+  --font-body: "DM Sans", Arial, sans-serif;
+
+  /* Shape and elevation */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 100px;
+  --shadow-sm: 0 4px 12px rgba(23, 60, 52, 0.05);
+  --shadow-lg: 0 20px 40px rgba(23, 60, 52, 0.12);
+
+  /* Layout */
+  --content-max: 1180px;
+  --section-space: 130px;
+}
