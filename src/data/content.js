@@ -2,6 +2,8 @@ export const links = {
   whatsapp: "https://wa.me/558591131822",
   doctoralia: "https://www.doctoralia.com.br/anderson-igor-nascimento-oliveira/nutricionista/maracanau",
   instagram: "https://www.instagram.com/nutritions_lifee/",
+  mapEmbed: "https://maps.google.com/maps?q=-3.8593816,-38.576287&z=16&output=embed",
+  mapDirections: "https://www.google.com/maps/dir/?api=1&destination=-3.8593816,-38.576287",
 };
 
 export const whatsappLink = (message) => `${links.whatsapp}?text=${encodeURIComponent(`Olá, Anderson! ${message}`)}`;
@@ -58,9 +60,9 @@ export const sampleMenu = [
 ];
 
 export const plans = [
-  { label: "Presencial", title: "Consultório", detail: "Rua São Francisco, 441 · Maracanaú", features: ["Anamnese e recordatório alimentar", "Bioimpedância e composição corporal", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], featured: true, packages: [["Avulso sem retorno", "R$ 200"], ["Avulso com 1 retorno", "R$ 360"], ["Pacote 3 consultas", "R$ 550"], ["Pacote 4 consultas", "R$ 700"], ["Pacote 6 consultas", "R$ 1.000"], ["Pacote 12 consultas", "R$ 1.900"]] },
-  { label: "Online", title: "Consultoria", detail: "Atendimento para todo o Brasil", features: ["Anamnese e recordatório alimentar", "Avaliação física por vídeo e/ou fotos", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], packages: [["Avulso sem retorno", "R$ 170"], ["Avulso com 1 retorno", "R$ 300"], ["Pacote 3 consultas", "R$ 420"], ["Pacote 4 consultas", "R$ 500"], ["Pacote 6 consultas", "R$ 800"], ["Pacote 12 consultas", "R$ 1.500"]] },
-  { label: "Em casa", title: "Personal Diet", detail: "Consulta no conforto do seu lar", features: ["Atendimento na sua casa", "Bioimpedância e composição corporal", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], packages: [["Avulso sem retorno", "R$ 250"], ["Avulso com 1 retorno", "R$ 500"], ["Pacote 3 consultas", "R$ 700"], ["Pacote 4 consultas", "R$ 900"], ["Pacote 6 consultas", "R$ 1.300"], ["Pacote 12 consultas", "R$ 2.500"]] },
+  { label: "Presencial", title: "Consultório", image: "/assets/image.png", detail: "Rua São Francisco, 441 · Maracanaú", features: ["Anamnese e recordatório alimentar", "Bioimpedância e composição corporal", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], featured: true, packages: [["Avulso sem retorno", "R$ 200"], ["Avulso com 1 retorno", "R$ 360"], ["Pacote 3 consultas", "R$ 550"], ["Pacote 4 consultas", "R$ 700"], ["Pacote 6 consultas", "R$ 1.000"], ["Pacote 12 consultas", "R$ 1.900"]] },
+  { label: "Online", title: "Consultoria", image: unsplash("1516321318423-f06f85e504b3", 400), detail: "Atendimento para todo o Brasil", features: ["Anamnese e recordatório alimentar", "Avaliação física por vídeo e/ou fotos", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], packages: [["Avulso sem retorno", "R$ 170"], ["Avulso com 1 retorno", "R$ 300"], ["Pacote 3 consultas", "R$ 420"], ["Pacote 4 consultas", "R$ 500"], ["Pacote 6 consultas", "R$ 800"], ["Pacote 12 consultas", "R$ 1.500"]] },
+  { label: "Em casa", title: "Personal Diet", image: unsplash("1498837167922-ddd27525d352", 400), detail: "Consulta no conforto do seu lar", features: ["Atendimento na sua casa", "Bioimpedância e composição corporal", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], packages: [["Avulso sem retorno", "R$ 250"], ["Avulso com 1 retorno", "R$ 500"], ["Pacote 3 consultas", "R$ 700"], ["Pacote 4 consultas", "R$ 900"], ["Pacote 6 consultas", "R$ 1.300"], ["Pacote 12 consultas", "R$ 2.500"]] },
 ];
 
 export const planNotes = ["Material de apoio para a sua nova jornada", "Pacotes de 3+ consultas podem ser divididos com familiares ou amigos", "10% de desconto em procedimentos estéticos, manipulados e suplementos"];

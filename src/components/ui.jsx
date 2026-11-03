@@ -41,23 +41,6 @@ export function Icon({ name }) {
   );
 }
 
-/** Selo circular com texto girando. */
-export function RotatingBadge({ text, children, className = "" }) {
-  return (
-    <div className={`rotating-badge ${className}`} aria-hidden="true">
-      <svg viewBox="0 0 200 200">
-        <defs>
-          <path id={`circle-${className}`} d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
-        </defs>
-        <text>
-          <textPath href={`#circle-${className}`}>{text}</textPath>
-        </text>
-      </svg>
-      <span className="rotating-badge__center">{children}</span>
-    </div>
-  );
-}
-
 export function WhatsappIcon() {
   return (
     <svg viewBox="0 0 32 32" aria-hidden="true">
