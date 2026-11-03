@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Arrow, Brand, Icon, RotatingBadge, SectionLabel, WhatsappIcon } from "./components/ui";
+import { Arrow, Brand, Icon, SectionLabel, WhatsappIcon } from "./components/ui";
 import {
   CountUp,
   Magnetic,
@@ -475,16 +475,19 @@ function PlanCard({ plan, index }) {
   const count = consultCount(label);
   const base = toNumber(plan.packages[0][1]);
   const saving = base * count - total;
+  // O plano em destaque fica no meio, como na referência.
+  const order = plan.featured ? 2 : index === 1 ? 1 : 3;
 
   return (
-    <article className={`plan ${plan.featured ? "plan--featured" : ""}`} data-reveal style={{ "--d": index }} {...tilt(4)}>
-      {plan.featured && <span className="plan__badge">Mais escolhido</span>}
+    <article className={`plan ${plan.featured ? "plan--featured" : ""}`} data-reveal style={{ "--d": index, order }}>
+      <span className="plate plan__plate"><img src={plan.image} alt="" loading="lazy" /></span>
+      {plan.featured && <span className="plan__badge">★ Mais escolhido</span>}
       <span className="plan__label">{plan.label}</span>
       <h3>{plan.title}</h3>
       <p className="plan__detail">{plan.detail}</p>
 
       <label className="plan__select">
-        <span>Escolha o formato</span>
+        <span>Escolha o pacote</span>
         <select value={choice} onChange={(event) => setChoice(Number(event.target.value))}>
           {plan.packages.map(([packageLabel], packageIndex) => (
             <option value={packageIndex} key={packageLabel}>{packageLabel}</option>
@@ -522,7 +525,7 @@ function Plans() {
           {plans.map((plan, index) => <PlanCard plan={plan} index={index} key={plan.title} />)}
         </div>
         <ul className="plans__notes" data-reveal>
-          {planNotes.map((note) => <li key={note}>✦ {note}</li>)}
+          {planNotes.map((note) => <li key={note}><span>✓</span>{note}</li>)}
         </ul>
       </div>
     </section>
@@ -736,54 +739,42 @@ function BeforeAfter({ result }) {
 }
 
 function Results() {
-  const [active, setActive] = useState(0);
-  const result = results[active];
-
   return (
     <section className="results" id="resultados">
       <div className="container">
-        <div className="results__head">
-          <div>
-            <SectionLabel number="02">Resultados reais</SectionLabel>
-            <SplitTitle lines={["Transformações que", "*falam por si."]} />
-          </div>
-          <p data-reveal>Arraste a linha para comparar. Cada resultado veio de um plano individualizado, construído para a rotina de cada paciente.</p>
+        <div className="sec-head sec-head--center">
+          <SectionLabel number="02">Resultados reais</SectionLabel>
+          <SplitTitle lines={["Transformações que", "*falam por si."]} />
+          <p data-reveal>Arraste a linha de cada foto para comparar o antes e o depois.</p>
         </div>
 
-        <div className="results__grid">
-          <div className="results__viewer" data-reveal="clip">
-            <BeforeAfter result={result} key={result.name} />
+        <div className="results__cards">
+          {results.map((result, index) => (
+            <article className={`result-card ${index === 1 ? "result-card--featured" : ""}`} data-reveal style={{ "--d": index }} key={result.name}>
+              <BeforeAfter result={result} />
+              <div className="result-card__body">
+                <span className="result-card__tag">★ {result.goal}</span>
+                <h3>{result.name}</h3>
+                <p>{result.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="results__stage">
+          <div className="results__stage-media" data-reveal="left">
+            <img src="/assets/resultados/paciente-palco.webp" alt="Atletas em competição de fisiculturismo da CBFFW" loading="lazy" />
           </div>
-
-          <div className="results__side">
-            <ul className="results__list" role="tablist" aria-label="Pacientes">
-              {results.map((item, index) => (
-                <li key={item.name}>
-                  <button type="button" role="tab" aria-selected={index === active} className={index === active ? "is-active" : ""} onClick={() => setActive(index)}>
-                    <span className="results__thumbs">
-                      <img src={item.before} alt="" />
-                      <img src={item.after} alt="" />
-                    </span>
-                    <span>
-                      <strong>{item.name}</strong>
-                      <small>{item.goal}</small>
-                    </span>
-                    <Arrow />
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <p className="results__text" key={result.name}>{result.text}</p>
-
-            <figure className="results__stage" data-reveal>
-              <img src="/assets/resultados/paciente-palco.webp" alt="Pacientes em competição de fisiculturismo da CBFFW" loading="lazy" />
-              <figcaption>
-                <span>✦ Do consultório ao palco</span>
-                <strong>Preparação nutricional para competições de fisiculturismo.</strong>
-              </figcaption>
-            </figure>
+          <div className="results__stage-copy" data-reveal="right">
+            <span className="results__stage-kicker">✦ Do consultório ao palco</span>
+            <h3>Preparação nutricional para <em>competições.</em></h3>
+            <p>Estratégia de pico, ajuste fino de dieta e suplementação para quem vai subir no palco do fisiculturismo.</p>
+            <a className="link-arrow" href={whatsappLink("Quero preparação nutricional para competição.")} target="_blank" rel="noopener noreferrer">
+              Quero me preparar <Arrow />
+            </a>
           </div>
         </div>
+
         <p className="results__note">Imagens divulgadas com autorização dos pacientes. Os resultados variam de pessoa para pessoa.</p>
       </div>
     </section>
@@ -801,13 +792,47 @@ const guidesTotal = (count) => {
 
 function Store() {
   const [cart, setCart] = useState([]);
+  const [center, setCenter] = useState(1);
+  const trackRef = useRef(null);
   const toggle = (id) => setCart((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   const selectAll = () => setCart(guides.map((guide) => guide.id));
+
+  // Carrossel: o cartão mais próximo do centro fica em destaque.
+  useEffect(() => {
+    const track = trackRef.current;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const middle = track.getBoundingClientRect().left + track.clientWidth / 2;
+      let closest = 0;
+      let distance = Infinity;
+      [...track.children].forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const gap = Math.abs(rect.left + rect.width / 2 - middle);
+        if (gap < distance) { distance = gap; closest = index; }
+      });
+      setCenter(closest);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const second = track.children[1];
+    track.scrollLeft = second.offsetLeft + second.offsetWidth / 2 - track.clientWidth / 2;
+    update();
+    track.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      track.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  const go = (direction) => {
+    const target = trackRef.current.children[Math.min(guides.length - 1, Math.max(0, center + direction))];
+    trackRef.current.scrollTo({ left: target.offsetLeft + target.offsetWidth / 2 - trackRef.current.clientWidth / 2, behavior: "smooth" });
+  };
 
   const count = cart.length;
   const full = count * guidePrice;
   const total = guidesTotal(count);
-  // Se um combo maior custa o mesmo ou menos, o carrinho sugere completar.
   const upsell = guideCombos.find((combo) => combo.size > count && combo.price <= total + guidePrice);
   const nextCombo = guideCombos.find((combo) => combo.size > count);
   let cartHint = `Leve ${nextCombo?.size} guias por ${money(nextCombo?.price ?? 0)}`;
@@ -838,19 +863,21 @@ function Store() {
             </div>
           ))}
         </div>
+      </div>
 
-        <div className="store__grid">
+      <div className="carousel">
+        <div className="carousel__track" ref={trackRef}>
           {guides.map((guide, index) => {
             const selected = cart.includes(guide.id);
             return (
-              <article className={`guide ${selected ? "is-selected" : ""}`} data-reveal style={{ "--d": index % 4 }} key={guide.id}>
+              <article className={`guide ${selected ? "is-selected" : ""} ${index === center ? "is-center" : ""}`} key={guide.id}>
                 <button type="button" className="guide__cover" onClick={() => toggle(guide.id)} aria-pressed={selected} data-cursor={selected ? "Remover" : "Adicionar"}>
                   <img src={`/assets/guias/${guide.id}.webp`} alt={`Capa do ${guide.title}`} loading="lazy" />
                   <img className="guide__peek" src={`/assets/guias/${guide.id}-p2.webp`} alt="" loading="lazy" />
                   <span className="guide__check" aria-hidden="true">✓</span>
                 </button>
                 <div className="guide__body">
-                  <span className="guide__meta">{guide.pages} páginas · PDF</span>
+                  <span className="guide__meta">★ {guide.pages} páginas · PDF</span>
                   <h3>{guide.title}</h3>
                   <p>{guide.subtitle}</p>
                   <div className="guide__foot">
@@ -868,6 +895,11 @@ function Store() {
               </article>
             );
           })}
+        </div>
+        <div className="carousel__nav">
+          <button type="button" onClick={() => go(-1)} disabled={center === 0} aria-label="Guia anterior">←</button>
+          <span>{String(center + 1).padStart(2, "0")} / {String(guides.length).padStart(2, "0")}</span>
+          <button type="button" onClick={() => go(1)} disabled={center === guides.length - 1} aria-label="Próximo guia">→</button>
         </div>
       </div>
 
@@ -928,12 +960,22 @@ function Booking() {
     <section className="booking" id="contato">
       <div className="container">
         <div className="booking__card" data-reveal="scale">
-          <div className="booking__media">
-            <img data-speed="-0.05" src="/assets/image.png" alt="Anderson Oliveira atendendo um paciente no consultório" loading="lazy" />
-            <ul className="booking__info">
-              <li><Icon name="pin" /><span><small>Consultório</small>Rua São Francisco, 441 · Maracanaú</span></li>
-              <li><Icon name="chat" /><span><small>Online</small>Atendimento para todo o Brasil</span></li>
-            </ul>
+          <div className="booking__map">
+            <iframe
+              title="Mapa do consultório Nutrition's Life em Maracanaú"
+              src={links.mapEmbed}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+            <div className="booking__address">
+              <span className="booking__pin"><Icon name="pin" /></span>
+              <div>
+                <strong>Rua São Francisco, 441</strong>
+                <small>Maracanaú · CE · também online para todo o Brasil</small>
+              </div>
+              <a className="booking__route" href={links.mapDirections} target="_blank" rel="noopener noreferrer">Como chegar <Arrow /></a>
+            </div>
           </div>
           <form className="booking__form" onSubmit={submit}>
             <SectionLabel number="12">Agende sua consulta</SectionLabel>
@@ -961,34 +1003,20 @@ function Booking() {
 function Footer() {
   return (
     <footer className="footer">
-      <div className="container">
-        <div className="footer__grid">
-          <div className="footer__brand">
-            <Brand />
-            <p>Nutrição clínica, esportiva e funcional em Maracanaú (CE) e online para todo o Brasil.</p>
-          </div>
-          <nav aria-label="Links do rodapé">
-            <h3>Navegação</h3>
-            {navLinks.map(([label, href]) => <a href={href} key={href}>{label}</a>)}
-          </nav>
-          <address>
-            <h3>Atendimento</h3>
-            <span>Presencial: Rua São Francisco, 441 · Maracanaú · CE</span>
-            <span>Online: todo o Brasil</span>
-            <span>Em casa: Personal Diet</span>
-          </address>
-          <div>
-            <h3>Redes</h3>
-            <a href={instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
-            <a href={doctoralia} target="_blank" rel="noopener noreferrer">Doctoralia ↗</a>
-            <a href={links.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp ↗</a>
-          </div>
+      <div className="container footer__row">
+        <Brand />
+        <nav className="footer__nav" aria-label="Links do rodapé">
+          {navLinks.map(([label, href]) => <a href={href} key={href}>{label}</a>)}
+        </nav>
+        <div className="footer__social">
+          <a href={instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href={doctoralia} target="_blank" rel="noopener noreferrer">Doctoralia</a>
+          <a href={links.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </div>
-        <p className="footer__giant" aria-hidden="true">nutrition&apos;s life</p>
-        <div className="footer__bottom">
-          <small>© 2026 Anderson Oliveira · Nutricionista · CRN-11</small>
-          <a href="#inicio">Voltar ao topo ↑</a>
-        </div>
+      </div>
+      <div className="container footer__bottom">
+        <small>© 2026 Anderson Oliveira · Nutricionista · CRN 14913 · Rua São Francisco, 441 · Maracanaú – CE</small>
+        <a href="#inicio">Voltar ao topo ↑</a>
       </div>
     </footer>
   );
