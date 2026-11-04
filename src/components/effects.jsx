@@ -146,18 +146,3 @@ export function Cursor() {
     </>
   );
 }
-
-/** Contador 0–100 do loader. */
-export function LoaderCount({ duration = 1100 }) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    const start = performance.now();
-    let frame = requestAnimationFrame(function tick(now) {
-      const t = Math.min(1, (now - start) / duration);
-      setValue(Math.round(100 * (1 - Math.pow(1 - t, 3))));
-      if (t < 1) frame = requestAnimationFrame(tick);
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [duration]);
-  return <span className="loader__count">{String(value).padStart(3, "0")}</span>;
-}

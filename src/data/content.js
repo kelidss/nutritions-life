@@ -2,8 +2,8 @@ export const links = {
   whatsapp: "https://wa.me/558591131822",
   doctoralia: "https://www.doctoralia.com.br/anderson-igor-nascimento-oliveira/nutricionista/maracanau",
   instagram: "https://www.instagram.com/nutritions_lifee/",
-  mapEmbed: "https://maps.google.com/maps?q=-3.8593816,-38.576287&z=16&output=embed",
-  mapDirections: "https://www.google.com/maps/dir/?api=1&destination=-3.8593816,-38.576287",
+  mapEmbed: "https://maps.google.com/maps?q=Luana%20Bezerra%20Est%C3%A9tica%2C%20R.%20Evandisa%20Santos%2C%2017F%20-%20Paju%C3%A7ara%2C%20Maracana%C3%BA%20-%20CE&z=16&output=embed",
+  mapDirections: "https://www.google.com/maps/dir/?api=1&destination=Luana%20Bezerra%20Est%C3%A9tica%2C%20R.%20Evandisa%20Santos%2C%2017F%20-%20Paju%C3%A7ara%2C%20Maracana%C3%BA%20-%20CE",
 };
 
 export const whatsappLink = (message) => `${links.whatsapp}?text=${encodeURIComponent(`Olá, Anderson! ${message}`)}`;
@@ -60,7 +60,7 @@ export const sampleMenu = [
 ];
 
 export const plans = [
-  { label: "Presencial", title: "Consultório", image: "/assets/image.png", detail: "Rua São Francisco, 441 · Maracanaú", features: ["Anamnese e recordatório alimentar", "Bioimpedância e composição corporal", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], featured: true, packages: [["Avulso sem retorno", "R$ 200"], ["Avulso com 1 retorno", "R$ 360"], ["Pacote 3 consultas", "R$ 550"], ["Pacote 4 consultas", "R$ 700"], ["Pacote 6 consultas", "R$ 1.000"], ["Pacote 12 consultas", "R$ 1.900"]] },
+  { label: "Presencial", title: "Consultório", image: "/assets/image.png", detail: "R. Evandisa Santos, 17F · Pajuçara, Maracanaú", features: ["Anamnese e recordatório alimentar", "Bioimpedância e composição corporal", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], featured: true, packages: [["Avulso sem retorno", "R$ 200"], ["Avulso com 1 retorno", "R$ 360"], ["Pacote 3 consultas", "R$ 550"], ["Pacote 4 consultas", "R$ 700"], ["Pacote 6 consultas", "R$ 1.000"], ["Pacote 12 consultas", "R$ 1.900"]] },
   { label: "Online", title: "Consultoria", image: unsplash("1516321318423-f06f85e504b3", 400), detail: "Atendimento para todo o Brasil", features: ["Anamnese e recordatório alimentar", "Avaliação física por vídeo e/ou fotos", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], packages: [["Avulso sem retorno", "R$ 170"], ["Avulso com 1 retorno", "R$ 300"], ["Pacote 3 consultas", "R$ 420"], ["Pacote 4 consultas", "R$ 500"], ["Pacote 6 consultas", "R$ 800"], ["Pacote 12 consultas", "R$ 1.500"]] },
   { label: "Em casa", title: "Personal Diet", image: unsplash("1498837167922-ddd27525d352", 400), detail: "Consulta no conforto do seu lar", features: ["Atendimento na sua casa", "Bioimpedância e composição corporal", "Plano calculado e individualizado", "Fitoterápicos e/ou suplementação", "Acompanhamento via WhatsApp"], packages: [["Avulso sem retorno", "R$ 250"], ["Avulso com 1 retorno", "R$ 500"], ["Pacote 3 consultas", "R$ 700"], ["Pacote 4 consultas", "R$ 900"], ["Pacote 6 consultas", "R$ 1.300"], ["Pacote 12 consultas", "R$ 2.500"]] },
 ];
@@ -114,9 +114,9 @@ export const quiz = [
 ];
 
 export const results = [
-  { name: "Paciente 1", goal: "Emagrecimento", before: "/assets/resultados/paciente-1-antes.webp", after: "/assets/resultados/paciente-1-depois.webp", text: "Mudança completa de composição corporal com plano possível e acompanhamento contínuo." },
-  { name: "Paciente 2", goal: "Recomposição corporal", before: "/assets/resultados/paciente-2-antes.webp", after: "/assets/resultados/paciente-2-depois.webp", text: "Menos gordura, mais definição e treino rendendo de verdade." },
-  { name: "Paciente 3", goal: "Definição", before: "/assets/resultados/paciente-3-antes.webp", after: "/assets/resultados/paciente-3-depois.webp", text: "Estratégia ajustada à rotina para chegar à melhor forma." },
+  { name: "Paciente 1", goal: "Emagrecimento", before: "/assets/resultados/paciente-1-antes.webp", after: "/assets/resultados/paciente-1-depois.webp", text: "Mudou a relação com a comida e o corpo acompanhou. Sem dieta maluca, com constância." },
+  { name: "Paciente 2", goal: "Recomposição corporal", before: "/assets/resultados/paciente-2-antes.webp", after: "/assets/resultados/paciente-3-depois.webp", text: "Menos gordura, mais definição e o treino finalmente rendendo." },
+  { name: "Atleta", goal: "Do treino ao pódio", before: "/assets/resultados/atleta-antes.webp", after: "/assets/resultados/atleta-depois.webp", text: "Começou nos treinos do dia a dia e chegou ao palco do fisiculturismo." },
 ];
 
 export const guides = [

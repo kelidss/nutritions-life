@@ -11,14 +11,9 @@ export function Brand({ dark = false }) {
   );
 }
 
-export function SectionLabel({ number, children }) {
-  return (
-    <p className="section-label" data-reveal>
-      <span>{number}</span>
-      <i aria-hidden="true" />
-      {children}
-    </p>
-  );
+/** Rótulo curto escrito à mão acima dos títulos. */
+export function SectionLabel({ children }) {
+  return <p className="section-label" data-reveal>{children}</p>;
 }
 
 const iconPaths = {

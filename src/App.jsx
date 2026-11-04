@@ -11,7 +11,7 @@ import {
   useRevealAll,
   useScrollProgress,
 } from "./components/motion";
-import { Cursor, LoaderCount, VelocityMarquee, setScrollLocked, useSmoothScroll } from "./components/effects";
+import { Cursor, VelocityMarquee, setScrollLocked, useSmoothScroll } from "./components/effects";
 import {
   faq,
   guideCombos,
@@ -42,24 +42,6 @@ const navLinks = [
   ["Guias", "#guias"],
   ["Contato", "#contato"],
 ];
-
-function Loader({ done }) {
-  return (
-    <div className={`loader ${done ? "loader--done" : ""}`} aria-hidden="true">
-      <div className="loader__inner">
-        <img src="/assets/ícone branco.jpg" alt="" />
-        <p className="loader__word">
-          {"nutrition's life".split("").map((letter, index) => (
-            <span key={index} style={{ "--i": index }}>{letter === " " ? " " : letter}</span>
-          ))}
-        </p>
-        <span className="loader__bar" />
-      </div>
-      <LoaderCount />
-      <span className="loader__tag">Nutrição · Estratégia · Resultado</span>
-    </div>
-  );
-}
 
 function ScrollProgress() {
   const ref = useRef(null);
@@ -144,7 +126,7 @@ function Hero({ ready }) {
     <section className={`hero ${ready ? "is-ready" : ""}`} id="inicio" ref={ref}>
       <div className="container hero__grid">
         <div className="hero__copy">
-          <p className="hero__kicker"><span className="pulse-dot" /> Nutricionista · CRN 14913</p>
+          <p className="hero__kicker">Nutricionista em Maracanaú · CRN 14913</p>
           <h1 className="hero__title">
             <span className="hero__line"><span>Alimente a sua</span></span>
             <span className="hero__line"><span><em>melhor versão.</em></span></span>
@@ -174,13 +156,14 @@ function Hero({ ready }) {
         <div className="hero__visual">
           <span className="hero__disc" aria-hidden="true" />
           <img className="hero__photo" src="/assets/anderson-cutout-2.png" alt="Anderson Oliveira, nutricionista da Nutrition's Life" fetchPriority="high" />
-          <span className="plate hero__plate" aria-hidden="true">
-            <img src={specialties[2].image} alt="" />
-          </span>
-          <div className="hero__chip">
-            <Icon name="leaf" />
-            <span><strong>100% individualizado</strong><small>Sem dieta da moda</small></span>
-          </div>
+          <p className="hero__note" aria-hidden="true">
+            oi, eu sou o Anderson!
+            <svg viewBox="0 0 90 70"><path d="M6 10c28-6 58 4 70 44M62 44l14 12 4-17" /></svg>
+          </p>
+          <a className="polaroid hero__polaroid" href="#resultados" aria-label="Ver resultados de pacientes">
+            <img src={results[2].after} alt="" />
+            <span>do treino ao pódio</span>
+          </a>
         </div>
       </div>
 
@@ -195,7 +178,7 @@ function Hero({ ready }) {
 
 function Marquee() {
   const words = ["Nutrição clínica", "Emagrecimento", "Hipertrofia", "Nutrição funcional", "Fitoterapia", "Suplementação"];
-  const items = words.map((word) => <span key={word}>{word}<b>✦</b></span>);
+  const items = words.map((word) => <span key={word}>{word}<b>•</b></span>);
   return (
     <div className="marquee" aria-label="Áreas de atuação">
       <VelocityMarquee className="marquee__row marquee__row--coral">{items}</VelocityMarquee>
@@ -220,7 +203,7 @@ function About() {
         </div>
 
         <div className="about__copy">
-          <SectionLabel number="01">Sobre o Anderson</SectionLabel>
+          <SectionLabel>prazer, Anderson</SectionLabel>
           <SplitTitle lines={["Você não precisa", "de mais uma dieta.", "*Precisa de estratégia."]} />
           <p className="about__intro" data-reveal>
             Sou <strong>Anderson Oliveira</strong>, nutricionista especializado em Nutrição Clínica, Funcional, Esportiva, Fitoterapia e Suplementação, com consultório em Maracanaú e atendimento online para todo o Brasil.
@@ -228,11 +211,10 @@ function About() {
           <p className="about__statement" ref={statementRef} style={{ "--n": words.length }}>
             {words.map((word, index) => <span key={index} style={{ "--i": index }}>{word} </span>)}
           </p>
-          <ul className="about__chips" data-reveal>
-            <li><Icon name="star" /> CRN-11</li>
-            <li><Icon name="pin" /> Maracanaú · CE</li>
-            <li><Icon name="chat" /> Online · todo o Brasil</li>
-          </ul>
+          <div className="about__sign" data-reveal>
+            <span className="about__signature">Anderson Oliveira</span>
+            <small>Nutricionista · CRN 14913 · Maracanaú – CE</small>
+          </div>
         </div>
       </div>
     </section>
@@ -259,7 +241,7 @@ function Method() {
     <section className="method" id="metodo">
       <div className="container">
         <div className="sec-head sec-head--center">
-          <SectionLabel number="03">Por que funciona</SectionLabel>
+          <SectionLabel>por que funciona</SectionLabel>
           <SplitTitle lines={["A diferença entre", "*fazer dieta e ter estratégia."]} />
         </div>
         <div className="method__grid">
@@ -276,7 +258,7 @@ function Method() {
           </article>
           <div className="method__vs" data-reveal="scale">vs</div>
           <article className="method__card method__card--new" data-reveal="right" {...tilt(5)}>
-            <span className="method__badge">✦ Recomendado</span>
+            <span className="method__badge">é assim que eu trabalho</span>
             <h3>Método Nutrition&apos;s Life</h3>
             <ul>
               {methodCompare.new.map(([title, text], index) => (
@@ -303,7 +285,7 @@ function Specialties() {
       <div className="spec__sticky">
         <div className="spec__track" ref={trackRef}>
           <div className="spec__intro">
-            <SectionLabel number="04">Especialidades</SectionLabel>
+            <SectionLabel>como posso te ajudar</SectionLabel>
             <SplitTitle lines={["Seu caminho", "para uma", "*saúde de verdade."]} />
             <p data-reveal>Cada objetivo pede uma estratégia diferente. Escolha por onde quer começar.</p>
             <div className="spec__hint" data-reveal>
@@ -355,7 +337,7 @@ function Process() {
       <div className="container">
         <div className="process__grid">
           <div className="process__aside">
-            <SectionLabel number="05">Como funciona</SectionLabel>
+            <SectionLabel>o passo a passo</SectionLabel>
             <SplitTitle lines={["Um plano que", "*acompanha você."]} />
             <p data-reveal>Clareza para começar, estratégia para avançar e acompanhamento para não caminhar sozinho.</p>
             <div className="process__big" aria-hidden="true">
@@ -405,7 +387,7 @@ function MenuDay() {
     <section className="menu" id="cardapio">
       <div className="container menu__grid">
         <div className="menu__copy">
-          <SectionLabel number="06">Exemplo de cardápio</SectionLabel>
+          <SectionLabel>um dia no prato</SectionLabel>
           <SplitTitle lines={["Um dia de", "*comida de verdade."]} />
           <p className="menu__intro" data-reveal>Saboroso, prático e com comida regional. Toque em cada refeição — os valores são ilustrativos, o seu cardápio é calculado para você.</p>
 
@@ -481,7 +463,7 @@ function PlanCard({ plan, index }) {
   return (
     <article className={`plan ${plan.featured ? "plan--featured" : ""}`} data-reveal style={{ "--d": index, order }}>
       <span className="plate plan__plate"><img src={plan.image} alt="" loading="lazy" /></span>
-      {plan.featured && <span className="plan__badge">★ Mais escolhido</span>}
+      {plan.featured && <span className="plan__badge">o mais escolhido</span>}
       <span className="plan__label">{plan.label}</span>
       <h3>{plan.title}</h3>
       <p className="plan__detail">{plan.detail}</p>
@@ -517,7 +499,7 @@ function Plans() {
     <section className="plans" id="planos">
       <div className="container">
         <div className="sec-head sec-head--center">
-          <SectionLabel number="08">Planos e valores</SectionLabel>
+          <SectionLabel>planos e valores</SectionLabel>
           <SplitTitle lines={["Seu cuidado,", "*do seu jeito."]} />
           <p data-reveal>Escolha o formato e o pacote — o valor por consulta e a economia aparecem na hora.</p>
         </div>
@@ -560,7 +542,7 @@ function Quiz() {
       <div className="container">
         <div className="quiz__box" data-reveal="scale">
           <div className="quiz__aside">
-            <SectionLabel number="07">Descubra seu plano</SectionLabel>
+            <SectionLabel>vamos descobrir juntos?</SectionLabel>
             <h2>Seu plano ideal em <em>30 segundos.</em></h2>
             <p>Responda 3 perguntas rápidas e receba uma recomendação feita para o seu momento.</p>
             <ol className="quiz__steps" aria-hidden="true">
@@ -602,7 +584,7 @@ function Quiz() {
                 <div className="quiz__burst" aria-hidden="true">
                   {Array.from({ length: 12 }).map((_, index) => <i key={index} style={{ "--a": `${index * 30}deg` }} />)}
                 </div>
-                <span className="quiz__count">✦ Sua recomendação</span>
+                <span className="quiz__count">minha sugestão pra você</span>
                 <h3>{result.plan.title} <em>· {result.label}</em></h3>
                 <p>Foco em <strong>{result.specialty.title.toLowerCase()}</strong>, com plano individualizado e acompanhamento direto pelo WhatsApp.</p>
                 <div className="quiz__price">
@@ -635,7 +617,7 @@ function Reviews() {
     <section className="reviews" id="avaliacoes">
       <div className="container reviews__head">
         <div>
-          <SectionLabel number="10">Opiniões reais</SectionLabel>
+          <SectionLabel>quem já passou por aqui</SectionLabel>
           <SplitTitle lines={["O que dizem", "*os pacientes."]} />
         </div>
         <div className="reviews__score" data-reveal="scale">
@@ -674,7 +656,7 @@ function Faq() {
     <section className="faq" id="duvidas">
       <div className="container faq__grid">
         <div className="faq__head">
-          <SectionLabel number="11">Perguntas frequentes</SectionLabel>
+          <SectionLabel>dúvidas comuns</SectionLabel>
           <SplitTitle lines={["Tire suas", "*dúvidas."]} />
           <p data-reveal>Não encontrou o que procura? Mande uma mensagem — a resposta vem direto do Anderson.</p>
         </div>
@@ -743,9 +725,9 @@ function Results() {
     <section className="results" id="resultados">
       <div className="container">
         <div className="sec-head sec-head--center">
-          <SectionLabel number="02">Resultados reais</SectionLabel>
+          <SectionLabel>gente de verdade</SectionLabel>
           <SplitTitle lines={["Transformações que", "*falam por si."]} />
-          <p data-reveal>Arraste a linha de cada foto para comparar o antes e o depois.</p>
+          <p data-reveal>Pessoas reais, com rotina de verdade. Arraste a linha de cada foto para ver a mudança.</p>
         </div>
 
         <div className="results__cards">
@@ -753,7 +735,7 @@ function Results() {
             <article className={`result-card ${index === 1 ? "result-card--featured" : ""}`} data-reveal style={{ "--d": index }} key={result.name}>
               <BeforeAfter result={result} />
               <div className="result-card__body">
-                <span className="result-card__tag">★ {result.goal}</span>
+                <span className="result-card__tag">{result.goal}</span>
                 <h3>{result.name}</h3>
                 <p>{result.text}</p>
               </div>
@@ -766,9 +748,9 @@ function Results() {
             <img src="/assets/resultados/paciente-palco.webp" alt="Atletas em competição de fisiculturismo da CBFFW" loading="lazy" />
           </div>
           <div className="results__stage-copy" data-reveal="right">
-            <span className="results__stage-kicker">✦ Do consultório ao palco</span>
-            <h3>Preparação nutricional para <em>competições.</em></h3>
-            <p>Estratégia de pico, ajuste fino de dieta e suplementação para quem vai subir no palco do fisiculturismo.</p>
+            <span className="results__stage-kicker">do consultório ao palco</span>
+            <h3>Ela começou do zero e <em>chegou ao pódio.</em></h3>
+            <p>Treino, plano alimentar ajustado fase a fase e muita constância. A mesma estratégia individualizada do primeiro dia até o palco do fisiculturismo.</p>
             <a className="link-arrow" href={whatsappLink("Quero preparação nutricional para competição.")} target="_blank" rel="noopener noreferrer">
               Quero me preparar <Arrow />
             </a>
@@ -846,7 +828,7 @@ function Store() {
     <section className="store" id="guias">
       <div className="container">
         <div className="sec-head sec-head--center">
-          <SectionLabel number="09">Guias digitais</SectionLabel>
+          <SectionLabel>meus guias</SectionLabel>
           <SplitTitle lines={["Conhecimento para", "*levar para casa."]} />
           <p data-reveal>Guias práticos em PDF criados pelo Anderson. Cada um sai por {money(guidePrice)} — e em combo fica ainda mais em conta.</p>
         </div>
@@ -877,7 +859,7 @@ function Store() {
                   <span className="guide__check" aria-hidden="true">✓</span>
                 </button>
                 <div className="guide__body">
-                  <span className="guide__meta">★ {guide.pages} páginas · PDF</span>
+                  <span className="guide__meta">{guide.pages} páginas · PDF</span>
                   <h3>{guide.title}</h3>
                   <p>{guide.subtitle}</p>
                   <div className="guide__foot">
@@ -971,14 +953,14 @@ function Booking() {
             <div className="booking__address">
               <span className="booking__pin"><Icon name="pin" /></span>
               <div>
-                <strong>Rua São Francisco, 441</strong>
-                <small>Maracanaú · CE · também online para todo o Brasil</small>
+                <strong>R. Evandisa Santos, 17F</strong>
+                <small>Pajuçara · Maracanaú – CE (Luana Bezerra Estética)</small>
               </div>
               <a className="booking__route" href={links.mapDirections} target="_blank" rel="noopener noreferrer">Como chegar <Arrow /></a>
             </div>
           </div>
           <form className="booking__form" onSubmit={submit}>
-            <SectionLabel number="12">Agende sua consulta</SectionLabel>
+            <SectionLabel>bora começar?</SectionLabel>
             <SplitTitle lines={["Sua melhor versão", "*começa hoje."]} />
             <p className="booking__lead">Escolha as opções e a mensagem chega pronta no WhatsApp do Anderson.</p>
             <div className="booking__grid">
@@ -1015,7 +997,7 @@ function Footer() {
         </div>
       </div>
       <div className="container footer__bottom">
-        <small>© 2026 Anderson Oliveira · Nutricionista · CRN 14913 · Rua São Francisco, 441 · Maracanaú – CE</small>
+        <small>© 2026 Anderson Oliveira · Nutricionista · CRN 14913 · R. Evandisa Santos, 17F – Pajuçara, Maracanaú – CE</small>
         <a href="#inicio">Voltar ao topo ↑</a>
       </div>
     </footer>
@@ -1049,13 +1031,12 @@ export default function App() {
   useSmoothScroll();
 
   useEffect(() => {
-    const timer = setTimeout(() => setReady(true), prefersReducedMotion() ? 0 : 1300);
+    const timer = setTimeout(() => setReady(true), 60);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      <Loader done={ready} />
       <ScrollProgress />
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <Header />
