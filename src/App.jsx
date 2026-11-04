@@ -189,32 +189,78 @@ function Marquee() {
 
 function About() {
   const statementRef = useRef(null);
-  useScrollProgress(statementRef, { start: 0.85, end: 0.35 });
-  const statement = "Eu também já passei pelo processo de mudar hábitos e transformar meu corpo. Sei que não é simples começar — por isso construo estratégias possíveis, com acolhimento, ciência e constância.";
+  useScrollProgress(statementRef, { start: 0.85, end: 0.4 });
+  const statement = "Não acredito em dieta perfeita. Acredito em estratégia possível, ajustada à sua rotina, com acolhimento, ciência e constância.";
   const words = statement.split(" ");
+  const story = [
+    { image: "/assets/anderson-antes.webp", alt: "Anderson antes da mudança de hábitos", title: "onde tudo começou", text: "Acima do peso e sem saber por onde começar. Eu conheço esse lugar." },
+    { image: "/assets/anderson-depois.webp", alt: "Anderson depois da mudança de hábitos", title: "a virada", text: "Mudei a alimentação e a rotina na prática, um passo de cada vez." },
+  ];
+  const pillars = [
+    ["swap", "Plano possível", "Feito para a sua rotina, não para uma vida perfeita."],
+    ["chart", "Ciência no detalhe", "Exames, bioimpedância e evidência guiando cada ajuste."],
+    ["chat", "Falo direto com você", "Dúvidas pelo WhatsApp, sem intermediários."],
+  ];
+  const areas = ["Nutrição clínica", "Nutrição esportiva", "Nutrição funcional", "Fitoterapia", "Suplementação"];
 
   return (
-    <section className="about" id="sobre">
-      <div className="container about__grid">
-        <div className="about__media" data-reveal="clip">
-          <div className="about__frame">
-            <img data-speed="-0.06" src="/assets/anderson-transformacao.png" alt="Antes e depois da transformação pessoal de Anderson Oliveira" loading="lazy" />
+    <section className="bio" id="sobre">
+      <div className="container">
+        <div className="bio__head">
+          <div>
+            <SectionLabel>prazer, Anderson</SectionLabel>
+            <SplitTitle lines={["Eu sei como é", "*começar do zero."]} />
           </div>
+          <p className="bio__intro" data-reveal>
+            Sou <strong>Anderson Oliveira</strong>, nutricionista em Maracanaú e online para todo o Brasil. Antes de cuidar dos meus pacientes, precisei cuidar de mim — e essa história mudou o jeito que eu atendo.
+          </p>
         </div>
 
-        <div className="about__copy">
-          <SectionLabel>prazer, Anderson</SectionLabel>
-          <SplitTitle lines={["Você não precisa", "de mais uma dieta.", "*Precisa de estratégia."]} />
-          <p className="about__intro" data-reveal>
-            Sou <strong>Anderson Oliveira</strong>, nutricionista especializado em Nutrição Clínica, Funcional, Esportiva, Fitoterapia e Suplementação, com consultório em Maracanaú e atendimento online para todo o Brasil.
-          </p>
-          <p className="about__statement" ref={statementRef} style={{ "--n": words.length }}>
+        <div className="bio__body">
+        <ol className="bio__story">
+          {story.map((item, index) => (
+            <li className="bio__step" data-reveal style={{ "--d": index }} key={item.title}>
+              <figure className="bio__photo">
+                <img src={item.image} alt={item.alt} loading="lazy" />
+                <span className="bio__num">0{index + 1}</span>
+              </figure>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+              {index < story.length - 1 && (
+                <svg className="bio__arrow" viewBox="0 0 120 50" aria-hidden="true"><path d="M4 30c30-26 70-26 104-4M96 14l12 12-16 6" /></svg>
+              )}
+            </li>
+          ))}
+        </ol>
+
+        <div className="bio__bottom">
+          <p className="bio__statement" ref={statementRef} style={{ "--n": words.length }}>
             {words.map((word, index) => <span key={index} style={{ "--i": index }}>{word} </span>)}
           </p>
-          <div className="about__sign" data-reveal>
-            <span className="about__signature">Anderson Oliveira</span>
-            <small>Nutricionista · CRN 14913 · Maracanaú – CE</small>
+          <div className="bio__side">
+            <ul className="bio__pillars">
+              {pillars.map(([icon, title, text], index) => (
+                <li data-reveal style={{ "--d": index }} key={title}>
+                  <span className="bio__icon"><Icon name={icon} /></span>
+                  <span><strong>{title}</strong>{text}</span>
+                </li>
+              ))}
+            </ul>
+            <ul className="bio__areas" data-reveal>
+              {areas.map((area) => <li key={area}>{area}</li>)}
+            </ul>
+            <div className="bio__foot" data-reveal>
+              <div>
+                <span className="bio__signature">Anderson Oliveira</span>
+                <small>Nutricionista · CRN 14913</small>
+              </div>
+              <div className="bio__links">
+                <a href={instagram} target="_blank" rel="noopener noreferrer">Instagram <Arrow /></a>
+                <a href={doctoralia} target="_blank" rel="noopener noreferrer">Doctoralia · 5,0 <Arrow /></a>
+              </div>
+            </div>
           </div>
+        </div>
         </div>
       </div>
     </section>
@@ -340,9 +386,13 @@ function Process() {
             <SectionLabel>o passo a passo</SectionLabel>
             <SplitTitle lines={["Um plano que", "*acompanha você."]} />
             <p data-reveal>Clareza para começar, estratégia para avançar e acompanhamento para não caminhar sozinho.</p>
-            <div className="process__big" aria-hidden="true">
-              <span key={active}>0{Math.max(active, 0) + 1}</span>
-            </div>
+            <figure className="process__photo" data-reveal>
+              <img src="/assets/image.png" alt="Anderson explicando o plano alimentar a um paciente no consultório" loading="lazy" />
+              <figcaption>
+                <span className="process__now" key={active}>etapa 0{Math.max(active, 0) + 1}</span>
+                <span>consulta sem pressa, olho no olho</span>
+              </figcaption>
+            </figure>
           </div>
           <ol className="process__steps" ref={ref}>
             <span className="process__line" aria-hidden="true"><span /></span>
@@ -361,6 +411,7 @@ function Process() {
         </div>
 
         <div className="includes">
+          <p className="includes__kicker" data-reveal>e não para por aí</p>
           <h3 className="includes__title" data-reveal>Tudo isso <em>incluso</em> no seu plano</h3>
           <div className="includes__grid">
             {includes.map(([icon, title, text], index) => (
@@ -544,7 +595,7 @@ function Quiz() {
           <div className="quiz__aside">
             <SectionLabel>vamos descobrir juntos?</SectionLabel>
             <h2>Seu plano ideal em <em>30 segundos.</em></h2>
-            <p>Responda 3 perguntas rápidas e receba uma recomendação feita para o seu momento.</p>
+            <p>Responda 3 perguntas rápidas e eu te mostro o caminho que mais combina com o seu momento.</p>
             <ol className="quiz__steps" aria-hidden="true">
               {quiz.map((item, index) => (
                 <li className={index < step ? "is-done" : index === step ? "is-current" : ""} key={item.key}>
@@ -554,6 +605,10 @@ function Quiz() {
             </ol>
             <div className="quiz__progress" aria-hidden="true">
               <span style={{ "--q": Math.min(step, quiz.length) / quiz.length }} />
+            </div>
+            <div className="quiz__host" aria-hidden="true">
+              <p className="quiz__bubble" key={step}>{done ? "achei o seu plano!" : ["me conta: qual é o seu foco?", "e onde fica melhor pra você?", "última: por quanto tempo?"][step]}</p>
+              <img src="/assets/anderson-cutout-2.png" alt="" loading="lazy" />
             </div>
           </div>
 
@@ -571,7 +626,7 @@ function Quiz() {
                       onClick={() => choose(option)}
                       key={option.label}
                     >
-                      <span className="quiz__letter">{"ABCD"[index]}</span>
+                      <span className="quiz__letter"><Icon name={option.icon} /></span>
                       <span className="quiz__text"><strong>{option.label}</strong><small>{option.hint}</small></span>
                       <Arrow />
                     </button>
@@ -658,7 +713,17 @@ function Faq() {
         <div className="faq__head">
           <SectionLabel>dúvidas comuns</SectionLabel>
           <SplitTitle lines={["Tire suas", "*dúvidas."]} />
-          <p data-reveal>Não encontrou o que procura? Mande uma mensagem — a resposta vem direto do Anderson.</p>
+          <p data-reveal>Não encontrou o que procura? Mande uma mensagem — a resposta vem direto de mim.</p>
+          <div className="faq__card" data-reveal>
+            <img src="/assets/anderson-cutout-2.png" alt="" loading="lazy" />
+            <div>
+              <p>ficou alguma dúvida?</p>
+              <strong>Me chama, eu respondo pessoalmente.</strong>
+              <a className="btn btn--coral" href={whatsappLink("Tenho uma dúvida antes de agendar.")} target="_blank" rel="noopener noreferrer">
+                <WhatsappIcon /> Chamar no WhatsApp
+              </a>
+            </div>
+          </div>
         </div>
         <div className="faq__list">
           {faq.map(([question, answer], index) => (
@@ -774,43 +839,10 @@ const guidesTotal = (count) => {
 
 function Store() {
   const [cart, setCart] = useState([]);
-  const [center, setCenter] = useState(1);
-  const trackRef = useRef(null);
+  const shelfRef = useRef(null);
   const toggle = (id) => setCart((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   const selectAll = () => setCart(guides.map((guide) => guide.id));
-
-  // Carrossel: o cartão mais próximo do centro fica em destaque.
-  useEffect(() => {
-    const track = trackRef.current;
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const middle = track.getBoundingClientRect().left + track.clientWidth / 2;
-      let closest = 0;
-      let distance = Infinity;
-      [...track.children].forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
-        const gap = Math.abs(rect.left + rect.width / 2 - middle);
-        if (gap < distance) { distance = gap; closest = index; }
-      });
-      setCenter(closest);
-    };
-    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
-    const second = track.children[1];
-    track.scrollLeft = second.offsetLeft + second.offsetWidth / 2 - track.clientWidth / 2;
-    update();
-    track.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      track.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
-  const go = (direction) => {
-    const target = trackRef.current.children[Math.min(guides.length - 1, Math.max(0, center + direction))];
-    trackRef.current.scrollTo({ left: target.offsetLeft + target.offsetWidth / 2 - trackRef.current.clientWidth / 2, behavior: "smooth" });
-  };
+  const toShelf = () => shelfRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   const count = cart.length;
   const full = count * guidePrice;
@@ -823,65 +855,78 @@ function Store() {
   else if (total < full) cartHint = `Combo aplicado: economia de ${money(full - total)}`;
   const chosen = guides.filter((guide) => cart.includes(guide.id));
   const message = `Quero comprar ${count === guides.length ? "a coleção completa de guias" : `${count} guia${count > 1 ? "s" : ""}`}: ${chosen.map((guide) => guide.title).join(", ")}. Total: ${money(total)}.`;
+  const maxOff = Math.round((1 - guideCombos[guideCombos.length - 1].price / (guides.length * guidePrice)) * 100);
+  const stack = ["doces-fitness", "industrializados", "temperos"];
 
   return (
     <section className="store" id="guias">
       <div className="container">
-        <div className="sec-head sec-head--center">
-          <SectionLabel>meus guias</SectionLabel>
-          <SplitTitle lines={["Conhecimento para", "*levar para casa."]} />
-          <p data-reveal>Guias práticos em PDF criados pelo Anderson. Cada um sai por {money(guidePrice)} — e em combo fica ainda mais em conta.</p>
+        <div className="store__head">
+          <div className="store__intro">
+            <SectionLabel>meus guias</SectionLabel>
+            <SplitTitle lines={["Conhecimento para", "*levar para casa."]} />
+            <p data-reveal>Guias práticos em PDF, escritos por mim, para usar na cozinha, no mercado e no fim de semana. Cada um sai por {money(guidePrice)} — em combo, fica ainda mais em conta.</p>
+            <ul className="store__perks" data-reveal>
+              <li><Icon name="chat" /> Envio pelo WhatsApp</li>
+              <li><Icon name="book" /> Leia no celular ou imprima</li>
+              <li><Icon name="star" /> Até {maxOff}% off nos combos</li>
+            </ul>
+          </div>
+          <div className="store__stack" data-reveal="scale" aria-hidden="true">
+            {stack.map((id, index) => (
+              <img src={`/assets/guias/${id}.webp`} alt="" loading="lazy" style={{ "--i": index }} key={id} />
+            ))}
+            <p className="store__note">
+              escritos por mim!
+              <svg viewBox="0 0 90 70"><path d="M8 12c30-8 60 6 66 40M58 42l16 12 6-18" /></svg>
+            </p>
+          </div>
         </div>
 
-        <div className="combos" data-reveal>
-          {guideCombos.map((combo) => (
-            <div className={`combo ${combo.size === guides.length ? "combo--hot" : ""}`} key={combo.size}>
-              <span className="combo__label">{combo.label}</span>
-              <strong>{money(combo.price)}</strong>
-              <small>de {money(combo.size * guidePrice)} · economia de {money(combo.size * guidePrice - combo.price)}</small>
-              {combo.size === guides.length && (
-                <button type="button" onClick={selectAll}>Quero todos <Arrow /></button>
-              )}
-            </div>
-          ))}
+        <div className="tickets" data-reveal>
+          {guideCombos.map((combo) => {
+            const complete = combo.size === guides.length;
+            return (
+              <div className={`ticket ${complete ? "ticket--hot" : ""}`} key={combo.size}>
+                <div className="ticket__main">
+                  <span className="ticket__label">{combo.label}</span>
+                  <strong>{money(combo.price)}</strong>
+                  <small><s>{money(combo.size * guidePrice)}</s> · economia de {money(combo.size * guidePrice - combo.price)}</small>
+                </div>
+                <div className="ticket__stub">
+                  {complete ? (
+                    <button type="button" onClick={selectAll}>Quero todos</button>
+                  ) : (
+                    <button type="button" onClick={toShelf}>Escolher {combo.size}</button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </div>
 
-      <div className="carousel">
-        <div className="carousel__track" ref={trackRef}>
+        <div className="shelf" ref={shelfRef}>
           {guides.map((guide, index) => {
             const selected = cart.includes(guide.id);
             return (
-              <article className={`guide ${selected ? "is-selected" : ""} ${index === center ? "is-center" : ""}`} key={guide.id}>
-                <button type="button" className="guide__cover" onClick={() => toggle(guide.id)} aria-pressed={selected} data-cursor={selected ? "Remover" : "Adicionar"}>
+              <article className={`book ${selected ? "is-selected" : ""}`} data-reveal style={{ "--d": index % 4 }} key={guide.id}>
+                <button type="button" className="book__cover" onClick={() => toggle(guide.id)} aria-pressed={selected} data-cursor={selected ? "Remover" : "Adicionar"}>
                   <img src={`/assets/guias/${guide.id}.webp`} alt={`Capa do ${guide.title}`} loading="lazy" />
-                  <img className="guide__peek" src={`/assets/guias/${guide.id}-p2.webp`} alt="" loading="lazy" />
-                  <span className="guide__check" aria-hidden="true">✓</span>
+                  <img className="book__peek" src={`/assets/guias/${guide.id}-p2.webp`} alt="" loading="lazy" />
+                  <span className="book__pages">{guide.pages} págs</span>
+                  <span className="book__check" aria-hidden="true">✓</span>
                 </button>
-                <div className="guide__body">
-                  <span className="guide__meta">{guide.pages} páginas · PDF</span>
-                  <h3>{guide.title}</h3>
-                  <p>{guide.subtitle}</p>
-                  <div className="guide__foot">
-                    <strong>{money(guidePrice)}</strong>
-                    <button
-                      type="button"
-                      className="round-add"
-                      onClick={() => toggle(guide.id)}
-                      aria-label={selected ? `Remover ${guide.title} do carrinho` : `Adicionar ${guide.title} ao carrinho`}
-                    >
-                      {selected ? "✓" : "+"}
-                    </button>
-                  </div>
+                <h3>{guide.title}</h3>
+                <p>{guide.subtitle}</p>
+                <div className="book__foot">
+                  <strong>{money(guidePrice)}</strong>
+                  <button type="button" className="book__add" onClick={() => toggle(guide.id)} aria-label={selected ? `Remover ${guide.title} do carrinho` : `Adicionar ${guide.title} ao carrinho`}>
+                    {selected ? "No carrinho ✓" : "Adicionar +"}
+                  </button>
                 </div>
               </article>
             );
           })}
-        </div>
-        <div className="carousel__nav">
-          <button type="button" onClick={() => go(-1)} disabled={center === 0} aria-label="Guia anterior">←</button>
-          <span>{String(center + 1).padStart(2, "0")} / {String(guides.length).padStart(2, "0")}</span>
-          <button type="button" onClick={() => go(1)} disabled={center === guides.length - 1} aria-label="Próximo guia">→</button>
         </div>
       </div>
 

@@ -9,13 +9,34 @@ export function useRevealAll() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          entry.target.dataset.revealed = "";
           entry.target.classList.add("is-in");
           observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
-    document.querySelectorAll("[data-reveal]").forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
+    const watch = (root) => {
+      if (root.matches?.("[data-reveal]:not([data-revealed])")) observer.observe(root);
+      root.querySelectorAll?.("[data-reveal]:not([data-revealed])").forEach((element) => observer.observe(element));
+    };
+    watch(document);
+    // O React reescreve className ao trocar estados (ex.: FAQ aberto) e apagaria o "is-in";
+    // também revela elementos que aparecem depois do carregamento.
+    const mutations = new MutationObserver((records) => {
+      records.forEach((record) => {
+        if (record.type === "attributes") {
+          const element = record.target;
+          if (element.dataset.revealed !== undefined && !element.classList.contains("is-in")) element.classList.add("is-in");
+        } else {
+          record.addedNodes.forEach((node) => node.nodeType === 1 && watch(node));
+        }
+      });
+    });
+    mutations.observe(document.body, { attributes: true, attributeFilter: ["class"], childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+      mutations.disconnect();
+    };
   }, []);
 }
 

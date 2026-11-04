@@ -26,6 +26,14 @@ const iconPaths = {
   chart: <><path d="M4 20V4" /><path d="M4 20h16" /><path d="M8 16v-5M12 16V8M16 16v-3" /></>,
   star: <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" />,
   pin: <><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" /><circle cx="12" cy="9" r="2.5" /></>,
+  scale: <><path d="M5 20h14l-2-12H7z" /><path d="M9 8a3 3 0 0 1 6 0" /><path d="M12 13l2-2" /></>,
+  dumbbell: <><path d="M6 7v10M18 7v10M3 9.5v5M21 9.5v5M6 12h12" /></>,
+  heart: <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />,
+  bolt: <path d="M13 3L5 14h6l-1 7 8-11h-6z" />,
+  home: <><path d="M4 11l8-7 8 7" /><path d="M6 9.5V20h12V9.5" /><path d="M10 20v-5h4v5" /></>,
+  screen: <><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></>,
+  calendar: <><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 3v4M15 3v4" /></>,
+  flag: <><path d="M5 21V4" /><path d="M5 4h12l-2 4 2 4H5" /></>,
 };
 
 export function Icon({ name }) {
