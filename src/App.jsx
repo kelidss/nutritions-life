@@ -11,7 +11,7 @@ import {
   useRevealAll,
   useScrollProgress,
 } from "./components/motion";
-import { Cursor, VelocityMarquee, setScrollLocked, useSmoothScroll } from "./components/effects";
+import { VelocityMarquee, setScrollLocked, useSmoothScroll } from "./components/effects";
 import {
   faq,
   guideCombos,
@@ -160,10 +160,6 @@ function Hero({ ready }) {
             oi, eu sou o Anderson!
             <svg viewBox="0 0 90 70"><path d="M6 10c28-6 58 4 70 44M62 44l14 12 4-17" /></svg>
           </p>
-          <a className="polaroid hero__polaroid" href="#resultados" aria-label="Ver resultados de pacientes">
-            <img src={results[2].after} alt="" />
-            <span>do treino ao pódio</span>
-          </a>
         </div>
       </div>
 
@@ -387,10 +383,10 @@ function Process() {
             <SplitTitle lines={["Um plano que", "*acompanha você."]} />
             <p data-reveal>Clareza para começar, estratégia para avançar e acompanhamento para não caminhar sozinho.</p>
             <figure className="process__photo" data-reveal>
-              <img src="/assets/image.png" alt="Anderson explicando o plano alimentar a um paciente no consultório" loading="lazy" />
+              <img src="/assets/fotos/personal-diet-avaliacao.webp" alt="Anderson medindo a circunferência de uma paciente durante a avaliação" loading="lazy" />
               <figcaption>
                 <span className="process__now" key={active}>etapa 0{Math.max(active, 0) + 1}</span>
-                <span>consulta sem pressa, olho no olho</span>
+                <span>avaliação completa, sem pressa</span>
               </figcaption>
             </figure>
           </div>
@@ -810,7 +806,7 @@ function Results() {
 
         <div className="results__stage">
           <div className="results__stage-media" data-reveal="left">
-            <img src="/assets/resultados/paciente-palco.webp" alt="Atletas em competição de fisiculturismo da CBFFW" loading="lazy" />
+            <img src="/assets/resultados/paciente-palco-rafa.webp" alt="Paciente de biquíni vermelho no palco de uma competição de fisiculturismo da CBFFW" loading="lazy" />
           </div>
           <div className="results__stage-copy" data-reveal="right">
             <span className="results__stage-kicker">do consultório ao palco</span>
@@ -1104,7 +1100,6 @@ export default function App() {
       </main>
       <Footer />
       <FloatingWhatsapp />
-      <Cursor />
     </>
   );
 }

@@ -1210,3 +1210,35 @@ p.section-label.section-label { font-size: 28px; line-height: 1; margin: 0 0 14p
   .bio__step h3 { font-size: 24px; }
   .bio__step p { font-size: 13px; }
 }
+
+/* Ajustes do PDF (15/11) */
+/* Quiz: balão ao lado da foto, sem cobrir o Anderson */
+.quiz__host { align-items: flex-end; display: flex; gap: 8px; justify-content: space-between; }
+.quiz__host img { flex: none; height: auto; max-height: none; position: static; width: 58%; margin-right: -6%; }
+.quiz__bubble { align-self: center; flex: 1; max-width: none; position: static; }
+@media (max-width: 900px) { .quiz__host img { max-height: none; width: 50%; margin-right: 0; } }
+
+/* Foto real da avaliação no passo a passo */
+.process__photo { border-radius: 50%; max-width: 380px; overflow: visible; }
+.process__photo img { aspect-ratio: 1; border-radius: 50%; }
+.process__photo figcaption { bottom: -6px; left: 50%; right: auto; transform: translateX(-50%); white-space: nowrap; box-shadow: 0 14px 30px rgba(14,39,34,.12); }
+
+/* Palco: a paciente em pé, inteira */
+.results__stage-media { display: flex; justify-content: center; }
+.results__stage-media img { aspect-ratio: 372 / 728; max-width: 340px; object-position: center top; }
+
+/* Notas dos planos: ícone alinhado à primeira linha */
+.plans__notes li { align-items: flex-start; text-align: left; }
+.plans__notes li span { flex: none; margin-top: 2px; }
+@media (max-width: 600px) { .plans__notes { align-items: flex-start; flex-direction: column; gap: 12px; } }
+
+/* Planos: fotos maiores */
+.plans__grid { padding-top: 140px; }
+.plan { padding-top: 170px; }
+.plan__plate { height: 260px; top: -125px; width: 260px; }
+.plan:hover .plan__plate { transform: translateX(-50%) scale(1.03); }
+@media (max-width: 900px) {
+  .plans__grid { gap: 150px; padding-top: 120px; }
+  .plan { padding-top: 150px; }
+  .plan__plate { height: 230px; top: -110px; width: 230px; }
+}
