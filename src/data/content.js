@@ -75,7 +75,7 @@ export const reviews = [
 
 export const faq = [
   ["Preciso seguir uma dieta restritiva?", "Não. O plano é construído a partir da sua rotina, preferências e objetivo. A proposta é criar estratégias possíveis para a sua vida real."],
-  ["O atendimento online funciona para mim?", "Sim. A consulta online inclui anamnese, avaliação por vídeo e/ou fotos e acompanhamento próximo pelo WhatsApp."],
+  ["O atendimento online funciona para mim?", "Sim. A consulta online inclui anamnese e avaliação por vídeo e/ou fotos — você envia suas medidas para o Anderson. Depois, é só baixar o app Nutrium: lá ficam o seu cardápio, os gráficos de evolução, lembretes e um chat, além do acompanhamento próximo pelo WhatsApp."],
   ["A consulta inclui suplementação?", "Quando fizer sentido para o seu caso, a suplementação é avaliada de forma individualizada e baseada em evidências."],
   ["Como funciona o pagamento e o agendamento?", "Para confirmar a consulta, é solicitado o envio de 30% de entrada, abatido do valor total. Reagendamentos devem ser feitos com no mínimo 12 horas de antecedência; o saldo fica disponível por até 20 dias para uma nova data."],
   ["Os benefícios continuam depois do plano?", "Os benefícios ficam disponíveis durante a vigência do plano. Ao final, podem ser retomados mediante renovação."],
