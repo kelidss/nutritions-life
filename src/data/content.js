@@ -137,3 +137,46 @@ export const guideCombos = [
   { size: 5, price: 59, label: "Combo 5 guias" },
   { size: 8, price: 79, label: "Coleção completa" },
 ];
+
+// Exemplos reais de fichas de avaliação (nomes das pacientes ocultados).
+export const evaluations = [
+  {
+    key: "presencial",
+    tab: "Presencial",
+    title: "Avaliação presencial",
+    where: "Consultório e Personal Diet",
+    text: "Feita pessoalmente, com bioimpedância e adipômetro. Você sai com um relatório completo, e cada retorno mostra a sua evolução.",
+    items: [
+      "Bioimpedância: gordura, massa muscular, água e gordura visceral",
+      "Análise por segmento: braços, tronco e pernas",
+      "Dobras cutâneas com adipômetro (protocolo Durnin & Womersley)",
+      "Perímetros e diâmetros ósseos",
+      "Peso ideal, distribuição do peso magro e taxa metabólica",
+    ],
+    pages: [
+      ["presencial-bio", "Bioimpedância", 0.71],
+      ["presencial-2", "Dobras cutâneas", 1.416],
+      ["presencial-4", "Perímetros", 1.416],
+      ["presencial-5", "Resultados", 1.416],
+    ],
+  },
+  {
+    key: "online",
+    tab: "Online",
+    title: "Avaliação online",
+    where: "Consultoria para todo o Brasil",
+    text: "Feita por fotos, com um aplicativo que estima a sua composição corporal e compara cada avaliação com a anterior.",
+    items: [
+      "Composição corporal: % de gordura, massa magra e água",
+      "Gasto energético de repouso",
+      "Perímetros de braço, cintura, quadril, coxa e panturrilha",
+      "Indicadores de risco: razão cintura-estatura e índice de conicidade",
+      "Histórico com gráficos de evolução",
+    ],
+    pages: [
+      ["online-1", "Composição corporal", 0.706],
+      ["online-2", "Medidas e riscos", 0.706],
+      ["online-3", "Evolução", 0.706],
+    ],
+  },
+];

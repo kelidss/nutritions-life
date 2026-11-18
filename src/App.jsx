@@ -13,6 +13,7 @@ import {
 } from "./components/motion";
 import { VelocityMarquee, setScrollLocked, useSmoothScroll } from "./components/effects";
 import {
+  evaluations,
   faq,
   guideCombos,
   guidePrice,
@@ -420,6 +421,138 @@ function Process() {
           </div>
         </div>
       </div>
+    </section>
+  );
+}
+
+function Evaluations() {
+  const [tab, setTab] = useState(0);
+  const [page, setPage] = useState(0);
+  const [zoom, setZoom] = useState(false);
+  const current = evaluations[tab];
+  const [file, label] = current.pages[page];
+  const src = (name) => `/assets/avaliacao/${name}.webp`;
+  const stageRef = useRef(null);
+  // Inclina a pilha de fichas acompanhando o ponteiro (efeito 3D).
+  const onTilt = (event) => {
+    if (event.pointerType !== "mouse" || prefersReducedMotion()) return;
+    const rect = stageRef.current.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    stageRef.current.style.setProperty("--ty", `${(x * 16).toFixed(2)}deg`);
+    stageRef.current.style.setProperty("--tx", `${(-y * 10).toFixed(2)}deg`);
+  };
+  const resetTilt = () => {
+    stageRef.current.style.setProperty("--ty", "0deg");
+    stageRef.current.style.setProperty("--tx", "0deg");
+  };
+
+  const choose = (index) => {
+    setTab(index);
+    setPage(0);
+  };
+  const step = (direction) => setPage((value) => (value + direction + current.pages.length) % current.pages.length);
+
+  useEffect(() => {
+    if (!zoom) return undefined;
+    setScrollLocked(true);
+    return () => setScrollLocked(false);
+  }, [zoom]);
+
+  useEffect(() => {
+    if (!zoom) return undefined;
+    const onKey = (event) => {
+      if (event.key === "Escape") setZoom(false);
+      if (event.key === "ArrowRight") step(1);
+      if (event.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  return (
+    <section className="evals" id="avaliacao">
+      <div className="container">
+        <div className="evals__head">
+          <div>
+            <SectionLabel>por dentro da avaliação</SectionLabel>
+            <SplitTitle lines={["Uma avaliação", "*de verdade."]} />
+          </div>
+          <p data-reveal>Veja fichas reais de pacientes (com os nomes ocultados) e entenda a profundidade de cada avaliação física — no consultório ou online.</p>
+        </div>
+
+        <div className="evals__tabs" role="tablist" aria-label="Tipo de avaliação" data-reveal>
+          {evaluations.map((item, index) => (
+            <button type="button" role="tab" aria-selected={index === tab} className={index === tab ? "is-active" : ""} onClick={() => choose(index)} key={item.key}>
+              {item.tab}
+            </button>
+          ))}
+        </div>
+
+        <div className="evals__body" key={current.key}>
+          <div className="evals__info">
+            <span className="evals__where">{current.where}</span>
+            <h3>{current.title}</h3>
+            <p>{current.text}</p>
+            <ul>
+              {current.items.map((item) => <li key={item}>{item}</li>)}
+            </ul>
+            <a className="btn btn--coral" href={whatsappLink(`Quero agendar uma ${current.title.toLowerCase()}.`)} target="_blank" rel="noopener noreferrer">
+              Quero minha avaliação <Arrow />
+            </a>
+          </div>
+
+          <div className="evals__viewer">
+            <div
+              className="deck3d"
+              ref={stageRef}
+              data-reveal="deck"
+              onPointerMove={onTilt}
+              onPointerLeave={resetTilt}
+            >
+              <div className="deck3d__scene">
+                {current.pages.map(([name, text, ratio], index) => {
+                  const offset = index - page;
+                  return (
+                    <button
+                      type="button"
+                      className={`deck3d__sheet ${offset === 0 ? "is-front" : ""}`}
+                      style={{ "--o": offset, "--a": Math.abs(offset), "--ar": ratio, "--i": index }}
+                      onClick={() => (offset === 0 ? setZoom(true) : setPage(index))}
+                      aria-label={offset === 0 ? `Ampliar ficha: ${text}` : `Ver ficha: ${text}`}
+                      key={name}
+                    >
+                      <img src={src(name)} alt={`Exemplo de ficha de ${current.title.toLowerCase()}: ${text}`} loading="lazy" />
+                    </button>
+                  );
+                })}
+                <span className="deck3d__chip deck3d__chip--a" aria-hidden="true">{label}</span>
+                <span className="deck3d__chip deck3d__chip--b" aria-hidden="true">toque para ampliar</span>
+              </div>
+              <span className="deck3d__floor" aria-hidden="true" />
+            </div>
+            <div className="deck3d__nav">
+              <button type="button" onClick={() => step(-1)} aria-label="Ficha anterior">←</button>
+              <div className="deck3d__dots">
+                {current.pages.map(([name, text], index) => (
+                  <button type="button" className={index === page ? "is-active" : ""} onClick={() => setPage(index)} key={name}>{text}</button>
+                ))}
+              </div>
+              <button type="button" onClick={() => step(1)} aria-label="Próxima ficha">→</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {zoom && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={label} onClick={() => setZoom(false)}>
+          <img src={src(file)} alt={label} onClick={(event) => event.stopPropagation()} />
+          <button type="button" className="lightbox__close" onClick={() => setZoom(false)} aria-label="Fechar">✕</button>
+          <button type="button" className="lightbox__nav lightbox__nav--prev" onClick={(event) => { event.stopPropagation(); step(-1); }} aria-label="Página anterior">←</button>
+          <button type="button" className="lightbox__nav lightbox__nav--next" onClick={(event) => { event.stopPropagation(); step(1); }} aria-label="Próxima página">→</button>
+          <span className="lightbox__label">{label} · {page + 1}/{current.pages.length}</span>
+        </div>
+      )}
     </section>
   );
 }
@@ -1090,6 +1223,7 @@ export default function App() {
         <Method />
         <Specialties />
         <Process />
+        <Evaluations />
         <MenuDay />
         <Quiz />
         <Plans />
