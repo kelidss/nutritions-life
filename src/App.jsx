@@ -109,7 +109,6 @@ function Header() {
 }
 
 function Hero({ ready }) {
-  const leaf = "M2 22C2 10 10 2 22 2c0 12-8 20-20 20zM2 22L14 10";
   return (
     <section className={`hero hero--soft ${ready ? "is-ready" : ""}`} id="inicio">
       <div className="container">
@@ -140,14 +139,16 @@ function Hero({ ready }) {
           </div>
 
           <div className="hs__visual">
-            <svg className="hs__blob" viewBox="0 0 500 520" aria-hidden="true">
-              <path className="hs__blob-fill" d="M262 18c92 4 176 62 200 150 26 94-10 170-36 236-24 62-70 108-170 112-104 4-196-42-228-132C-2 300 12 214 46 146 86 64 160 14 262 18z" />
-              <path className="hs__blob-line" d="M262 18c92 4 176 62 200 150 26 94-10 170-36 236-24 62-70 108-170 112-104 4-196-42-228-132C-2 300 12 214 46 146 86 64 160 14 262 18z" />
-            </svg>
+            <div className="hs__halo" aria-hidden="true">
+              <span className="hs__orb" />
+              <span className="hs__ring" />
+              <p className="hs__hello">
+                oi, eu sou o Anderson!
+                <svg viewBox="0 0 120 70"><path d="M6 12c40-12 84 0 104 40M92 40l18 14 2-22" /></svg>
+              </p>
+            </div>
+            <span className="hs__chip" aria-hidden="true"><Icon name="chart" /> Bioimpedância inclusa</span>
             <span className="hs__plate" aria-hidden="true"><img src={sampleMenu[1].image} alt="" /></span>
-            <svg className="hs__leaf hs__leaf--a" viewBox="0 0 24 24" aria-hidden="true"><path d={leaf} /></svg>
-            <svg className="hs__leaf hs__leaf--b" viewBox="0 0 24 24" aria-hidden="true"><path d={leaf} /></svg>
-            <svg className="hs__leaf hs__leaf--c" viewBox="0 0 24 24" aria-hidden="true"><path d={leaf} /></svg>
             <img className="hs__photo" src="/assets/anderson-cutout-clean.png" alt="Anderson Oliveira, nutricionista" fetchPriority="high" />
             <div className="hs__badge">
               <img src="/assets/anderson-pill.webp" alt="" />
@@ -326,6 +327,7 @@ function Specialties() {
               Role para explorar →
             </div>
           </div>
+          <div className="spec__cards">
           {specialties.map((item, index) => (
             <article className="spec-card" key={item.title}>
               <span className="plate spec-card__plate"><img src={item.image} alt="" loading="lazy" /></span>
@@ -342,6 +344,7 @@ function Specialties() {
               </div>
             </article>
           ))}
+          </div>
           <div className="spec__end">
             <p>Não sabe por onde começar?</p>
             <Magnetic>

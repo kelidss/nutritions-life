@@ -1626,3 +1626,222 @@ html, body { overflow-x: clip; }
   .hero--soft .hs { padding-top: 70px; }
   .hero--soft .hs__copy { padding: 30px var(--gutter) 10px; }
 }
+
+/* ==========================================================================
+   Rodada "referências": paleta clara, painéis arredondados e ritmo de espaço
+   ========================================================================== */
+:root { --sage-soft: #e8efe2; --sage-strip: #d5e4c9; --section-y: clamp(72px, 8vw, 112px); --card-shadow: 0 18px 40px rgba(21,61,53,.08); }
+
+/* Espaçamento vertical único entre seções */
+.bio, .results, .method, .spec, .journey, .evals, .menu, .chatq, .plans, .store, .reviews, .faq, .visit { padding-block: var(--section-y); }
+.spec { padding-block: 0; }
+.sec-head { margin-bottom: clamp(40px, 5vw, 64px); }
+.journey__head, .evals__head, .visit__head, .bio__head { margin-bottom: clamp(36px, 4.5vw, 56px); }
+.perks { margin-top: clamp(64px, 7vw, 96px); }
+.includes { margin-top: clamp(64px, 7vw, 96px); }
+
+/* Faixa de palavras: tira fina e reta, como na referência */
+.hero--soft + .marquee { margin-top: 0; }
+.marquee { background: var(--sage-soft); padding: 0; }
+.marquee__row { font-family: var(--sans); font-size: clamp(15px, 1.4vw, 18px); font-weight: 600; margin-left: 0; padding: 16px 0; width: 100%; }
+.marquee__row--coral { background: var(--sage-strip); color: var(--forest); transform: none; }
+.marquee__row--forest { display: none; }
+.marquee__row .vmarquee__track span { gap: 26px; padding-right: 26px; }
+.marquee__row b { color: var(--coral); font-size: 1em; opacity: 1; }
+
+/* Números: painel verde-claro dentro do conteúdo */
+.stats { background: var(--paper); color: var(--ink); padding: 0 0 var(--section-y); }
+.stats__grid { background: var(--sage-soft); border-radius: 32px; padding: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 56px); }
+.stats__item { border-color: rgba(21,61,53,.14); }
+.stats__item strong { color: var(--forest); font-size: clamp(46px, 5.4vw, 80px); }
+.stats__item > span { color: var(--muted); }
+
+/* Resultados e método alternando fundos */
+.results { background: var(--sand); }
+.method { background: var(--paper); }
+.method__card--old { background: var(--sand); }
+
+/* Especialidades: fundo claro e cartões brancos */
+.spec { background: var(--sage-soft); color: var(--ink); }
+.spec .section-label.section-label { color: var(--coral); }
+.spec__intro h2 em { color: var(--coral); }
+.spec .scribble { stroke: var(--coral); }
+.spec__intro p { color: var(--muted); }
+.spec__hint { color: var(--forest-700); }
+.spec__bar { background: rgba(21,61,53,.14); }
+.spec-card { background: white; box-shadow: var(--card-shadow); }
+.spec-card__tags li { background: var(--sage-soft); }
+.spec__end p { color: var(--ink); }
+.spec__end .circle-btn:hover { background: var(--forest); color: white; }
+
+/* Avaliação física: painel escuro arredondado dentro do conteúdo */
+.evals { background: var(--paper); color: var(--ink); }
+.evals > .container { background: var(--forest); border-radius: 40px; color: var(--paper); padding: clamp(36px, 5vw, 72px); }
+
+/* Quiz e planos */
+.chatq { background: var(--sage-soft); }
+.chatq__perks li { background: white; }
+
+/* Avaliações: painel escuro arredondado, como na referência */
+.reviews { background: var(--paper); color: var(--ink); position: relative; }
+.reviews::before { background: var(--forest-950); border-radius: 40px; bottom: calc(var(--section-y) * .55); content: ""; left: max(var(--gutter), calc((100vw - 1280px) / 2)); position: absolute; right: max(var(--gutter), calc((100vw - 1280px) / 2)); top: calc(var(--section-y) * .55); }
+.reviews > * { position: relative; }
+.reviews__head { color: var(--paper); padding-inline: clamp(8px, 3vw, 40px); }
+.reviews__marquee { border-radius: 0 0 40px 40px; margin-inline: max(var(--gutter), calc((100vw - 1280px) / 2)); overflow: hidden; }
+
+/* Dúvidas e contato */
+.faq { background: var(--sand); }
+.visit { background: var(--paper); }
+.visit__place { background: white; box-shadow: var(--card-shadow); }
+.faq__item { border-color: rgba(21,61,53,.12); }
+
+/* Cartões: mesmo raio e sombra suave em todo o site */
+.result-card, .plan, .perks__card, .ticket, .review { box-shadow: var(--card-shadow); }
+
+@media (max-width: 900px) {
+  .stats__grid { border-radius: 24px; }
+  .evals > .container { border-radius: 28px; padding: 32px 20px; width: calc(100% - 2 * 12px); }
+  .reviews::before { border-radius: 28px; left: 12px; right: 12px; }
+  .reviews__marquee { margin-inline: 12px; }
+}
+
+/* Hero: fundo mais limpo e profissional (círculo sólido + órbita fina) */
+.hero--soft .hs { background: #eaf0e5; }
+.hs__orb { aspect-ratio: 1; background: #d3e2c6; border-radius: 50%; bottom: -18%; left: 50%; position: absolute; transform: translateX(-50%); width: min(92%, 560px); }
+.hs__orbit { aspect-ratio: 1; border: 1px solid rgba(21,61,53,.16); border-radius: 50%; bottom: -26%; left: 50%; position: absolute; transform: translateX(-50%); width: min(116%, 700px); }
+.hs__photo { height: 96%; bottom: -4%; }
+@media (max-width: 900px) { .hs__orb { bottom: -22%; width: 92%; } .hs__orbit { bottom: -30%; width: 120%; } .hs__photo { height: 96%; } }
+
+/* Seções de volta à largura total (sem painel/caixa) */
+.stats { background: var(--sage-soft); padding: clamp(48px, 6vw, 72px) 0; }
+.stats__grid { background: none; border-radius: 0; padding: 0; }
+.evals { background: var(--forest); color: var(--paper); }
+.evals > .container { background: none; border-radius: 0; padding: 0; width: min(1200px, 100% - 2 * var(--gutter)); }
+.reviews { background: var(--forest-950); color: var(--paper); }
+.reviews::before { display: none; }
+.reviews__head { padding-inline: 0; }
+.reviews__marquee { border-radius: 0; margin-inline: 0; }
+@media (max-width: 900px) { .evals > .container { padding: 0; width: calc(100% - 2 * var(--gutter)); } }
+.hs__orb { bottom: -20%; left: 56%; width: min(150%, 860px); }
+.hs__orbit { bottom: -30%; left: 56%; width: min(180%, 1040px); }
+@media (max-width: 900px) { .hs__orb { bottom: -14%; left: 50%; width: 120%; } .hs__orbit { bottom: -24%; left: 50%; width: 150%; } }
+
+/* Hero: camadas de detalhe (ramo em traço fino, cartão de cardápio e selo de bioimpedância) */
+.hs__branch { bottom: 8%; fill: none; height: 46%; left: 2%; opacity: .5; position: absolute; stroke: var(--forest-700); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4; z-index: 1; }
+.hs__menu { background: rgba(255,255,255,.92); border-radius: 18px; box-shadow: 0 20px 44px rgba(21,61,53,.14); display: grid; gap: 8px; left: 0; min-width: 190px; opacity: 0; padding: 14px 16px; position: absolute; top: 24%; transform: translateY(16px); transition: opacity .8s var(--ease-out) .9s, transform .8s var(--ease-out) .9s; z-index: 3; }
+.hero.is-ready .hs__menu { opacity: 1; transform: none; }
+.hs__menu-title { color: var(--forest); font-family: var(--hand); font-size: 20px; font-weight: 700; line-height: 1; margin-bottom: 2px; }
+.hs__menu-row { align-items: center; display: grid; gap: 8px; grid-template-columns: 20px 1fr auto; }
+.hs__menu-row i { align-items: center; background: #cfe2b8; border-radius: 50%; color: var(--forest); display: flex; font-size: 10px; font-style: normal; font-weight: 700; height: 20px; justify-content: center; transform: scale(0); transition: transform .5s var(--ease-out); transition-delay: calc(1.4s + var(--i) * .25s); width: 20px; }
+.hero.is-ready .hs__menu-row i { transform: none; }
+.hs__menu-row b { color: var(--ink); font-size: 13px; font-weight: 600; }
+.hs__menu-row small { color: var(--muted); font-size: 12px; }
+.hs__chip { align-items: center; background: var(--forest); border-radius: 100px; box-shadow: 0 16px 34px rgba(21,61,53,.2); color: white; display: inline-flex; font-size: 13px; font-weight: 700; gap: 8px; opacity: 0; padding: 10px 16px; position: absolute; right: 0; top: 52%; transform: translateY(16px); transition: opacity .8s var(--ease-out) 1.15s, transform .8s var(--ease-out) 1.15s; white-space: nowrap; z-index: 3; }
+.hero.is-ready .hs__chip { opacity: 1; transform: none; }
+.hs__chip .line-icon { color: #cfe2b8; height: 16px; width: 16px; }
+/* leve flutuação contínua dos cartões */
+@keyframes hs-float { 50% { translate: 0 -6px; } }
+.hero.is-ready .hs__menu { animation: hs-float 6s ease-in-out 2s infinite; }
+.hero.is-ready .hs__chip { animation: hs-float 6s ease-in-out 3s infinite; }
+.hero.is-ready .hs__badge { animation: hs-float 6s ease-in-out 4s infinite; }
+@media (max-width: 900px) {
+  .hs__menu { left: 4%; min-width: 0; padding: 10px 12px; top: 8%; }
+  .hs__menu-row:nth-child(n+3) { display: none; }
+  .hs__chip { display: none; }
+  .hs__branch { height: 40%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hs__menu, .hs__chip { opacity: 1; transform: none; animation: none !important; }
+  .hs__menu-row i { transform: none; }
+}
+.hs__chip { right: 4%; top: 56%; }
+@media (max-width: 900px) { .hs__menu { display: none; } }
+
+/* Círculo atrás do Anderson: centrado no rosto/ombros, dentro da coluna da foto */
+.hs__orb { bottom: auto; left: 50%; top: 5%; transform: translateX(-50%); width: min(86%, 540px); }
+.hs__orbit { border: 1px solid rgba(21,61,53,.18); bottom: auto; left: 50%; top: calc(5% - 26px); transform: translateX(-50%); width: calc(min(86%, 540px) + 52px); }
+.hs__orbit i { animation: orbit-spin 28s linear infinite; inset: -1px; position: absolute; border-radius: 50%; }
+.hs__orbit i::before { background: var(--coral); border: 3px solid #eaf0e5; border-radius: 50%; content: ""; height: 14px; left: 50%; position: absolute; top: -7px; transform: translateX(-50%); width: 14px; }
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+.hs__branch { left: 0; }
+@media (max-width: 900px) {
+  .hs__orb { top: 4%; width: 78%; }
+  .hs__orbit { top: calc(4% - 20px); width: calc(78% + 40px); }
+}
+@media (prefers-reduced-motion: reduce) { .hs__orbit i { animation: none; } }
+
+/* Halo atrás do Anderson: círculo + anel tracejado + ramo ancorado no próprio círculo */
+.hs__halo { aspect-ratio: 1; left: 50%; position: absolute; top: 5%; transform: translateX(-50%); width: min(86%, 540px); }
+.hs__halo .hs__orb { aspect-ratio: auto; bottom: auto; inset: 0; left: 0; top: 0; transform: none; width: auto; }
+.hs__ring { border: 1.5px dashed rgba(21,61,53,.22); border-radius: 50%; inset: -24px; position: absolute; }
+.hs__halo .hs__branch { bottom: 4%; height: 46%; left: -9%; opacity: .55; top: auto; width: auto; }
+@media (max-width: 900px) {
+  .hs__halo { top: 4%; width: 78%; }
+  .hs__ring { inset: -16px; }
+}
+
+/* ==========================================================================
+   Responsividade: celular mais enxuto (menos rolagem, sem fotos gigantes)
+   ========================================================================== */
+.spec__cards { display: contents; }
+
+@media (max-width: 900px) {
+  /* Especialidades: cartões deslizando para o lado */
+  .spec__cards { display: flex; gap: 16px; grid-column: 1 / -1; margin-inline: calc(-1 * var(--gutter)); overflow-x: auto; padding: 0 var(--gutter) 10px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .spec__cards::-webkit-scrollbar { display: none; }
+  .spec__cards .spec-card { flex: 0 0 min(80%, 340px); margin-top: 90px; scroll-snap-align: start; width: auto; }
+
+  /* Planos: cartões deslizando para o lado */
+  .plans__grid { display: flex; gap: 16px; margin-inline: calc(-1 * var(--gutter)); max-width: none; overflow-x: auto; padding: 120px var(--gutter) 16px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .plans__grid::-webkit-scrollbar { display: none; }
+  .plans__grid .plan { flex: 0 0 min(86%, 380px); scroll-snap-align: center; }
+
+  /* Palco: foto da paciente em tamanho controlado */
+  .results__stage-media img { max-width: 260px; }
+}
+
+@media (max-width: 700px) {
+  /* Passo a passo mais compacto */
+  .journey__steps { gap: 40px; }
+  .journey__photo { border-width: 6px; height: 150px; width: 150px; }
+  .journey__num { font-size: 18px; height: 46px; width: 46px; }
+
+  /* Itens inclusos: ícone ao lado do texto */
+  .perks__card { column-gap: 14px; display: grid; grid-template-columns: 48px 1fr; padding: 18px 20px; }
+  .perks__card .perks__icon { grid-row: span 2; height: 48px; margin: 0; width: 48px; }
+  .perks__card strong { margin-bottom: 2px; }
+
+  /* Combos dos guias mais baixos */
+  .ticket__main { padding: 16px 18px; }
+  .ticket strong { font-size: 32px; }
+
+  /* Dúvidas e números */
+  .faq__item button { padding: 22px 0; }
+  .stats__item strong { font-size: 44px; }
+}
+
+/* Tablet (601–1000px): melhor aproveitamento da largura */
+@media (min-width: 601px) and (max-width: 1000px) {
+  .result-card { flex-basis: 46%; }
+  .bio__story { margin-inline: auto; max-width: 560px; }
+  .perks { grid-template-columns: repeat(3, 1fr); }
+  .perks__intro, .perks__chat { grid-column: 1 / -1; }
+  .spec__cards .spec-card { flex-basis: 44%; }
+  .plans__grid .plan { flex-basis: 48%; }
+}
+
+/* Bilhete escrito à mão no lugar do ramo, ancorado no círculo */
+.hs__hello { bottom: 16%; color: var(--forest); font-family: var(--hand); font-size: clamp(22px, 2vw, 28px); font-weight: 700; left: -16%; line-height: 1; max-width: 140px; opacity: 0; position: absolute; transform: rotate(-8deg) translateY(10px); transition: opacity .8s var(--ease-out) 1.5s, transform .8s var(--ease-out) 1.5s; z-index: 4; }
+.hero.is-ready .hs__hello { opacity: 1; transform: rotate(-8deg); }
+.hs__hello svg { display: block; fill: none; height: 46px; margin: 6px 0 0 30%; stroke: var(--coral); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.5; width: 80px; }
+@media (max-width: 900px) { .hs__hello { bottom: 22%; font-size: 20px; left: -6%; max-width: 110px; } .hs__hello svg { height: 34px; width: 60px; } }
+@media (prefers-reduced-motion: reduce) { .hs__hello { opacity: 1; transform: rotate(-8deg); } }
+@media (min-width: 901px) and (max-width: 1200px) { .hs__hello { bottom: 8%; font-size: 22px; left: -2%; max-width: 120px; } .hs__hello svg { height: 36px; width: 64px; } }
+@media (min-width: 901px) and (max-width: 1200px) { .hs__hello { bottom: auto; left: -4%; top: 2%; } }
+
+/* Bilhete no lugar do antigo cartão de cardápio (à esquerda do rosto) */
+.hs__hello { bottom: auto; left: -14%; max-width: 150px; top: 24%; }
+.hs__hello svg { margin: 6px 0 0 40%; transform: rotate(-10deg); }
+@media (min-width: 901px) and (max-width: 1200px) { .hs__hello { left: -10%; top: 22%; } }
+@media (max-width: 900px) { .hs__hello { bottom: auto; left: -4%; top: 16%; } }
+@media (max-width: 900px) { .hs__hello { font-size: 19px; left: -2%; max-width: 96px; top: 14%; } .hs__hello svg { height: 30px; margin-left: 30%; width: 54px; } }
