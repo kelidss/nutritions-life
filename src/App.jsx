@@ -368,57 +368,74 @@ function Specialties() {
 
 function Process() {
   const ref = useRef(null);
-  const [active, setActive] = useState(-1);
-  useScrollProgress(ref, {
-    start: 0.65,
-    end: 0.35,
-    onProgress: (p) => setActive(p <= 0.02 ? -1 : Math.min(steps.length - 1, Math.floor(p * steps.length))),
-  });
+  useScrollProgress(ref, { start: 0.8, end: 0.45 });
+  const photos = [
+    ["/assets/fotos/personal-diet-avaliacao.webp", "Anderson medindo a circunferência de uma paciente"],
+    ["/assets/fotos/consultorio.webp", "Anderson montando o plano alimentar no computador"],
+    ["/assets/fotos/personal-diet.webp", "Anderson conversando com uma paciente"],
+  ];
+  const [chat, ...others] = includes;
 
   return (
-    <section className="process" id="processo">
+    <section className="journey" id="processo">
       <div className="container">
-        <div className="process__grid">
-          <div className="process__aside">
-            <SectionLabel>o passo a passo</SectionLabel>
-            <SplitTitle lines={["Um plano que", "*acompanha você."]} />
-            <p data-reveal>Clareza para começar, estratégia para avançar e acompanhamento para não caminhar sozinho.</p>
-            <figure className="process__photo" data-reveal>
-              <img src="/assets/fotos/personal-diet-avaliacao.webp" alt="Anderson medindo a circunferência de uma paciente durante a avaliação" loading="lazy" />
-              <figcaption>
-                <span className="process__now" key={active}>etapa 0{Math.max(active, 0) + 1}</span>
-                <span>avaliação completa, sem pressa</span>
-              </figcaption>
-            </figure>
-          </div>
-          <ol className="process__steps" ref={ref}>
-            <span className="process__line" aria-hidden="true"><span /></span>
-            {steps.map((step, index) => (
-              <li className={`process__step ${index <= active ? "is-active" : ""}`} key={step.title}>
-                <span className="process__dot">0{index + 1}</span>
-                <span className="process__tag">{step.tag}</span>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-                <ul>
-                  {step.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
-                </ul>
-              </li>
-            ))}
-          </ol>
+        <div className="journey__head">
+          <SectionLabel>o passo a passo</SectionLabel>
+          <SplitTitle lines={["Um plano que", "*acompanha você."]} />
+          <p data-reveal>Clareza para começar, estratégia para avançar e acompanhamento para não caminhar sozinho.</p>
         </div>
 
-        <div className="includes">
-          <p className="includes__kicker" data-reveal>e não para por aí</p>
-          <h3 className="includes__title" data-reveal>Tudo isso <em>incluso</em> no seu plano</h3>
-          <div className="includes__grid">
-            {includes.map(([icon, title, text], index) => (
-              <article className="include-card" data-reveal style={{ "--d": index }} key={title} {...tilt(10)}>
-                <span className="include-card__icon"><Icon name={icon} /></span>
-                <strong>{title}</strong>
-                <p>{text}</p>
-              </article>
-            ))}
+        <ol className="journey__steps" ref={ref}>
+          <svg className="journey__path" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M40 30 C 200 -10, 300 70, 500 30 S 800 -10, 960 30" pathLength="1" />
+          </svg>
+          {steps.map((step, index) => (
+            <li className="journey__step" data-reveal style={{ "--d": index }} key={step.title}>
+              <figure className="journey__photo">
+                <img src={photos[index][0]} alt={photos[index][1]} loading="lazy" />
+                <span className="journey__num">0{index + 1}</span>
+              </figure>
+              <span className="journey__tag">{step.tag}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+              <ul>
+                {step.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
+              </ul>
+            </li>
+          ))}
+        </ol>
+
+        <div className="perks">
+          <div className="perks__intro" data-reveal>
+            <p className="perks__kicker">e não para por aí</p>
+            <h3>Tudo isso <em>incluso</em> no seu plano.</h3>
+            <p>Além da consulta, você recebe materiais e suporte para colocar o plano em prática todos os dias.</p>
           </div>
+
+          <article className="perks__chat" data-reveal style={{ "--d": 1 }}>
+            <div className="perks__chat-head">
+              <span className="perks__icon"><Icon name={chat[0]} /></span>
+              <div>
+                <strong>{chat[1]}</strong>
+                <small>{chat[2]}</small>
+              </div>
+            </div>
+            <div className="perks__phone" aria-label="Exemplo ilustrativo de conversa pelo WhatsApp">
+              <p className="perks__msg perks__msg--in">Vou num aniversário hoje 😅 o que eu como lá?</p>
+              <p className="perks__msg perks__msg--out">Prioriza a proteína e a salada, escolhe 1 docinho sem culpa e volta ao plano amanhã 💪</p>
+              <p className="perks__msg perks__msg--in">Perfeito, obrigada!</p>
+              <span className="perks__typing"><i /><i /><i /></span>
+            </div>
+            <span className="perks__note">exemplo de conversa</span>
+          </article>
+
+          {others.map(([icon, title, text], index) => (
+            <article className="perks__card" data-reveal style={{ "--d": index + 2 }} key={title}>
+              <span className="perks__icon"><Icon name={icon} /></span>
+              <strong>{title}</strong>
+              <p>{text}</p>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -433,19 +450,6 @@ function Evaluations() {
   const [file, label] = current.pages[page];
   const src = (name) => `/assets/avaliacao/${name}.webp`;
   const stageRef = useRef(null);
-  // Inclina a pilha de fichas acompanhando o ponteiro (efeito 3D).
-  const onTilt = (event) => {
-    if (event.pointerType !== "mouse" || prefersReducedMotion()) return;
-    const rect = stageRef.current.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    stageRef.current.style.setProperty("--ty", `${(x * 16).toFixed(2)}deg`);
-    stageRef.current.style.setProperty("--tx", `${(-y * 10).toFixed(2)}deg`);
-  };
-  const resetTilt = () => {
-    stageRef.current.style.setProperty("--ty", "0deg");
-    stageRef.current.style.setProperty("--tx", "0deg");
-  };
 
   const choose = (index) => {
     setTab(index);
@@ -507,8 +511,6 @@ function Evaluations() {
               className="deck3d"
               ref={stageRef}
               data-reveal="deck"
-              onPointerMove={onTilt}
-              onPointerLeave={resetTilt}
             >
               <div className="deck3d__scene">
                 {current.pages.map(([name, text, ratio], index) => {
@@ -695,18 +697,24 @@ function Plans() {
 }
 
 function Quiz() {
-  const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState([]);
-  const done = step >= quiz.length;
+  const [visible, setVisible] = useState(0);
+  const [started, setStarted] = useState(false);
+  const bodyRef = useRef(null);
 
-  const choose = (option) => {
-    setAnswers([...answers.slice(0, step), option]);
-    setStep(step + 1);
-  };
-  const restart = () => {
-    setAnswers([]);
-    setStep(0);
-  };
+  // A conversa só começa quando o celular aparece na tela.
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setStarted(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.4 });
+    observer.observe(bodyRef.current);
+    return () => observer.disconnect();
+  }, []);
+  const step = answers.length;
+  const done = step >= quiz.length;
 
   let result = null;
   if (done) {
@@ -717,77 +725,110 @@ function Quiz() {
     result = { goal, plan, label, price, count, perConsult: Math.round(toNumber(price) / count), specialty: specialties[goal.specialty] };
   }
 
+  // Monta a conversa: perguntas do Anderson e respostas do visitante.
+  const reactions = ["Ótimo objetivo! E como você prefere ser atendido?", "Perfeito. Por quanto tempo você quer acompanhamento?"];
+  const messages = [
+    { from: "bot", text: "Oi! Eu sou o Anderson. Vou te ajudar a achar o plano ideal em 3 perguntinhas." },
+    { from: "bot", text: quiz[0].question },
+  ];
+  answers.forEach((answer, index) => {
+    messages.push({ from: "me", text: answer.label });
+    if (index < quiz.length - 1) messages.push({ from: "bot", text: reactions[index] });
+  });
+  if (result) {
+    messages.push({ from: "bot", text: "Pronto! Pelo que você me contou, eu indico:" });
+    messages.push({ from: "bot", plan: result });
+    messages.push({ from: "bot", text: `O foco vai ser ${result.specialty.title.toLowerCase()}. Quer agendar? É só me chamar aqui embaixo.` });
+  }
+
+  const typing = started && visible < messages.length && messages[visible].from === "bot";
+
+  useEffect(() => {
+    if (!started || visible >= messages.length) return undefined;
+    const delay = messages[visible].from === "me" ? 150 : prefersReducedMotion() ? 0 : 850;
+    const timer = setTimeout(() => setVisible((value) => value + 1), delay);
+    return () => clearTimeout(timer);
+  }, [started, visible, messages.length]);
+
+  useEffect(() => {
+    const body = bodyRef.current;
+    if (body) body.scrollTo({ top: body.scrollHeight, behavior: "smooth" });
+  }, [visible, typing]);
+
+  const answer = (option) => setAnswers([...answers, option]);
+  const restart = () => {
+    setAnswers([]);
+    setVisible(0);
+  };
+  const ready = visible >= messages.length;
+
   return (
-    <section className="quiz" id="quiz">
-      <div className="container">
-        <div className="quiz__box" data-reveal="scale">
-          <div className="quiz__aside">
-            <SectionLabel>vamos descobrir juntos?</SectionLabel>
-            <h2>Seu plano ideal em <em>30 segundos.</em></h2>
-            <p>Responda 3 perguntas rápidas e eu te mostro o caminho que mais combina com o seu momento.</p>
-            <ol className="quiz__steps" aria-hidden="true">
-              {quiz.map((item, index) => (
-                <li className={index < step ? "is-done" : index === step ? "is-current" : ""} key={item.key}>
-                  <span>{index < step ? "✓" : index + 1}</span>
-                </li>
-              ))}
-            </ol>
-            <div className="quiz__progress" aria-hidden="true">
-              <span style={{ "--q": Math.min(step, quiz.length) / quiz.length }} />
+    <section className="chatq" id="quiz">
+      <div className="container chatq__grid">
+        <div className="chatq__copy">
+          <SectionLabel>vamos descobrir juntos?</SectionLabel>
+          <SplitTitle lines={["Seu plano ideal", "*em 30 segundos."]} />
+          <p data-reveal>Uma conversa rápida comigo: responda 3 perguntas e receba na hora a minha sugestão de plano para o seu momento.</p>
+          <ul className="chatq__perks" data-reveal>
+            <li><Icon name="chat" /> 3 perguntas rápidas</li>
+            <li><Icon name="star" /> Sugestão na hora</li>
+            <li><Icon name="leaf" /> Sem compromisso</li>
+          </ul>
+        </div>
+
+        <div className="chatq__phone" data-reveal="scale">
+          <div className="chatq__top">
+            <img src="/assets/anderson-depois.webp" alt="" />
+            <div>
+              <strong>Anderson Oliveira</strong>
+              <small>{typing ? "digitando…" : "online"}</small>
             </div>
-            <div className="quiz__host" aria-hidden="true">
-              <p className="quiz__bubble" key={step}>{done ? "achei o seu plano!" : ["me conta: qual é o seu foco?", "e onde fica melhor pra você?", "última: por quanto tempo?"][step]}</p>
-              <img src="/assets/anderson-cutout-2.png" alt="" loading="lazy" />
-            </div>
+            {step > 0 && <button type="button" onClick={restart} aria-label="Recomeçar a conversa">↺</button>}
           </div>
 
-          <div className="quiz__stage" aria-live="polite">
-            {!done ? (
-              <div className="quiz__question" key={step}>
-                <span className="quiz__count">Pergunta {step + 1} de {quiz.length}</span>
-                <h3>{quiz[step].question}</h3>
-                <div className="quiz__options">
-                  {quiz[step].options.map((option, index) => (
-                    <button
-                      type="button"
-                      className={answers[step] === option ? "is-selected" : ""}
-                      style={{ "--d": index }}
-                      onClick={() => choose(option)}
-                      key={option.label}
-                    >
-                      <span className="quiz__letter"><Icon name={option.icon} /></span>
-                      <span className="quiz__text"><strong>{option.label}</strong><small>{option.hint}</small></span>
-                      <Arrow />
-                    </button>
-                  ))}
+          <div className="chatq__body" ref={bodyRef} data-lenis-prevent aria-live="polite">
+            {messages.slice(0, visible).map((message, index) => (
+              message.plan ? (
+                <div className="chatq__msg chatq__msg--bot chatq__plan" key={index}>
+                  <span className="plate"><img src={message.plan.plan.image} alt="" /></span>
+                  <div>
+                    <strong>{message.plan.plan.title}</strong>
+                    <small>{message.plan.label}</small>
+                    <b>{message.plan.price}</b>
+                    <small>{message.plan.count > 1 ? `${money(message.plan.perConsult)} por consulta` : "à vista / PIX"} · {message.plan.plan.detail}</small>
+                  </div>
                 </div>
-                {step > 0 && <button type="button" className="quiz__link" onClick={() => setStep(step - 1)}>← Voltar</button>}
-              </div>
-            ) : (
-              <div className="quiz__result" key="result">
-                <div className="quiz__burst" aria-hidden="true">
-                  {Array.from({ length: 12 }).map((_, index) => <i key={index} style={{ "--a": `${index * 30}deg` }} />)}
-                </div>
-                <span className="quiz__count">minha sugestão pra você</span>
-                <h3>{result.plan.title} <em>· {result.label}</em></h3>
-                <p>Foco em <strong>{result.specialty.title.toLowerCase()}</strong>, com plano individualizado e acompanhamento direto pelo WhatsApp.</p>
-                <div className="quiz__price">
-                  <strong>{result.price}</strong>
-                  <span>{result.count > 1 ? `${money(result.perConsult)} por consulta` : "à vista / PIX"} · {result.plan.detail}</span>
-                </div>
-                <div className="quiz__actions">
-                  <a
-                    className="btn btn--coral"
-                    href={whatsappLink(`Fiz o quiz do site! Objetivo: ${result.goal.label.toLowerCase()}. Plano: ${result.plan.title} – ${result.label} (${result.price}).`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Quero esse plano <Arrow />
-                  </a>
-                  <button type="button" className="quiz__link" onClick={restart}>Refazer ↺</button>
-                </div>
+              ) : (
+                <p className={`chatq__msg chatq__msg--${message.from}`} key={index}>{message.text}</p>
+              )
+            ))}
+            {typing && <span className="chatq__typing" aria-label="Anderson está digitando"><i /><i /><i /></span>}
+          </div>
+
+          <div className="chatq__reply">
+            {!done && ready && (
+              <div className="chatq__options" key={step}>
+                {quiz[step].options.map((option, index) => (
+                  <button type="button" style={{ "--d": index }} onClick={() => answer(option)} key={option.label}>
+                    <Icon name={option.icon} /> {option.label}
+                  </button>
+                ))}
               </div>
             )}
+            {done && ready && (
+              <div className="chatq__final">
+                <a
+                  className="btn btn--coral"
+                  href={whatsappLink(`Fiz o quiz do site! Objetivo: ${result.goal.label.toLowerCase()}. Plano: ${result.plan.title} – ${result.label} (${result.price}).`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <WhatsappIcon /> Continuar no WhatsApp
+                </a>
+                <button type="button" onClick={restart}>Refazer</button>
+              </div>
+            )}
+            {!ready && <span className="chatq__wait">…</span>}
           </div>
         </div>
       </div>
@@ -1113,30 +1154,55 @@ function Booking() {
   );
 
   return (
-    <section className="booking" id="contato">
+    <section className="visit" id="contato">
       <div className="container">
-        <div className="booking__card" data-reveal="scale">
-          <div className="booking__map">
-            <iframe
-              title="Mapa do consultório Nutrition's Life em Maracanaú"
-              src={links.mapEmbed}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            />
-            <div className="booking__address">
-              <span className="booking__pin"><Icon name="pin" /></span>
-              <div>
-                <strong>R. Evandisa Santos, 17F</strong>
-                <small>Pajuçara · Maracanaú – CE (Luana Bezerra Estética)</small>
-              </div>
-              <a className="booking__route" href={links.mapDirections} target="_blank" rel="noopener noreferrer">Como chegar <Arrow /></a>
-            </div>
-          </div>
-          <form className="booking__form" onSubmit={submit}>
+        <div className="visit__head">
+          <div>
             <SectionLabel>bora começar?</SectionLabel>
             <SplitTitle lines={["Sua melhor versão", "*começa hoje."]} />
-            <p className="booking__lead">Escolha as opções e a mensagem chega pronta no WhatsApp do Anderson.</p>
+          </div>
+          <p data-reveal>Venha ao consultório em Maracanaú, receba o Anderson em casa ou faça tudo online. Escolha as opções ao lado e a mensagem chega pronta no WhatsApp.</p>
+        </div>
+
+        <div className="visit__grid">
+          <div className="visit__place" data-reveal="left">
+            <div className="visit__map">
+              <iframe
+                title="Mapa do consultório Nutrition's Life em Maracanaú"
+                src={links.mapEmbed}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
+            <ul className="visit__info">
+              <li>
+                <span className="visit__icon"><Icon name="pin" /></span>
+                <div>
+                  <strong>R. Evandisa Santos, 17F</strong>
+                  <small>Pajuçara · Maracanaú – CE · dentro da Luana Bezerra Estética</small>
+                </div>
+                <a className="visit__route" href={links.mapDirections} target="_blank" rel="noopener noreferrer">Como chegar <Arrow /></a>
+              </li>
+              <li>
+                <span className="visit__icon"><Icon name="screen" /></span>
+                <div>
+                  <strong>Consultoria online</strong>
+                  <small>Para todo o Brasil, com acompanhamento pelo app Nutrium</small>
+                </div>
+              </li>
+              <li>
+                <span className="visit__icon"><Icon name="home" /></span>
+                <div>
+                  <strong>Personal Diet</strong>
+                  <small>Avaliação e consulta no conforto da sua casa</small>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <form className="booking__form visit__form" onSubmit={submit} data-reveal="right">
+            <p className="visit__form-title">Monte sua mensagem</p>
             <div className="booking__grid">
               <label className="booking__name">
                 <span>Seu nome</span>
