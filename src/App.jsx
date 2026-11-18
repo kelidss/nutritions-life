@@ -109,66 +109,56 @@ function Header() {
 }
 
 function Hero({ ready }) {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const progress = Math.min(1, window.scrollY / window.innerHeight);
-      ref.current?.style.setProperty("--hs", progress.toFixed(3));
-    };
-    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
+  const leaf = "M2 22C2 10 10 2 22 2c0 12-8 20-20 20zM2 22L14 10";
   return (
-    <section className={`hero ${ready ? "is-ready" : ""}`} id="inicio" ref={ref}>
-      <div className="container hero__grid">
-        <div className="hero__copy">
-          <p className="hero__kicker">Nutricionista em Maracanaú · CRN 14913</p>
-          <h1 className="hero__title">
-            <span className="hero__line"><span>Alimente a sua</span></span>
-            <span className="hero__line"><span><em>melhor versão.</em></span></span>
-          </h1>
-          <p className="hero__lead">
-            Acompanhamento próximo e estratégico para transformar sua rotina, sua saúde e seu corpo — com ciência e sem restrições severas.
-          </p>
-          <div className="hero__actions">
-            <Magnetic>
-              <a className="btn btn--coral" href={whatsappLink("Gostaria de agendar uma consulta.")} target="_blank" rel="noopener noreferrer">
-                Agendar consulta <Arrow />
-              </a>
-            </Magnetic>
-            <a className="btn btn--line" href="#quiz">Descubra seu plano</a>
-          </div>
-          <a className="hero__proof" href="#resultados">
-            <span className="hero__avatars">
-              {results.map((result) => <img src={result.after} alt="" key={result.after} />)}
-            </span>
-            <span>
-              <span className="hero__stars">★★★★★ <strong>5,0</strong></span>
-              <small>21 avaliações · ver antes e depois</small>
-            </span>
-          </a>
-        </div>
+    <section className={`hero hero--soft ${ready ? "is-ready" : ""}`} id="inicio">
+      <div className="container">
+        <div className="hs">
 
-        <div className="hero__visual">
-          <span className="hero__disc" aria-hidden="true" />
-          <img className="hero__photo" src="/assets/anderson-cutout-2.png" alt="Anderson Oliveira, nutricionista da Nutrition's Life" fetchPriority="high" />
-          <p className="hero__note" aria-hidden="true">
-            oi, eu sou o Anderson!
-            <svg viewBox="0 0 90 70"><path d="M6 10c28-6 58 4 70 44M62 44l14 12 4-17" /></svg>
-          </p>
+          <div className="hs__copy">
+            <p className="hero__kicker">Nutricionista em Maracanaú · CRN 14913</p>
+            <h1 className="hero__title hs__title">
+              <span className="hero__line"><span>Alimente a sua</span></span>
+              <span className="hero__line"><span><em>melhor versão.</em></span></span>
+            </h1>
+            <p className="hero__lead">
+              Acompanhamento próximo e estratégico para transformar sua rotina, sua saúde e seu corpo — <strong>com ciência e sem restrições severas.</strong>
+            </p>
+            <div className="hero__actions">
+              <Magnetic>
+                <a className="btn hs__cta" href={whatsappLink("Gostaria de agendar uma consulta.")} target="_blank" rel="noopener noreferrer">
+                  Agendar consulta <span className="hs__cta-arrow"><Arrow /></span>
+                </a>
+              </Magnetic>
+              <a className="btn btn--line" href="#quiz">Descubra seu plano</a>
+            </div>
+            <ul className="hs__features">
+              <li><span><Icon name="leaf" /></span>Plano 100% individual</li>
+              <li><span><Icon name="chat" /></span>Suporte pelo WhatsApp</li>
+              <li><span><Icon name="pin" /></span>Presencial e online</li>
+            </ul>
+          </div>
+
+          <div className="hs__visual">
+            <svg className="hs__blob" viewBox="0 0 500 520" aria-hidden="true">
+              <path className="hs__blob-fill" d="M262 18c92 4 176 62 200 150 26 94-10 170-36 236-24 62-70 108-170 112-104 4-196-42-228-132C-2 300 12 214 46 146 86 64 160 14 262 18z" />
+              <path className="hs__blob-line" d="M262 18c92 4 176 62 200 150 26 94-10 170-36 236-24 62-70 108-170 112-104 4-196-42-228-132C-2 300 12 214 46 146 86 64 160 14 262 18z" />
+            </svg>
+            <span className="hs__plate" aria-hidden="true"><img src={sampleMenu[1].image} alt="" /></span>
+            <svg className="hs__leaf hs__leaf--a" viewBox="0 0 24 24" aria-hidden="true"><path d={leaf} /></svg>
+            <svg className="hs__leaf hs__leaf--b" viewBox="0 0 24 24" aria-hidden="true"><path d={leaf} /></svg>
+            <svg className="hs__leaf hs__leaf--c" viewBox="0 0 24 24" aria-hidden="true"><path d={leaf} /></svg>
+            <img className="hs__photo" src="/assets/anderson-cutout-clean.png" alt="Anderson Oliveira, nutricionista" fetchPriority="high" />
+            <div className="hs__badge">
+              <img src="/assets/anderson-pill.webp" alt="" />
+              <span>
+                <strong>Anderson Oliveira <i aria-hidden="true">✓</i></strong>
+                <small>★★★★★ 5,0 · 21 avaliações</small>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-
-      <ul className="services container" aria-label="Formas de atendimento">
-        {[["pin", "Consultório em Maracanaú"], ["chat", "Consultoria online"], ["plate", "Personal Diet em casa"], ["book", "Guias digitais"]].map(([icon, label]) => (
-          <li key={label}><span className="services__icon"><Icon name={icon} /></span>{label}</li>
-        ))}
-      </ul>
     </section>
   );
 }
