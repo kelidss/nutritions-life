@@ -138,6 +138,16 @@ export const guideCombos = [
   { size: 8, price: 79, label: "Coleção completa" },
 ];
 
+/** Menor preço para N guias, aplicando os combos (usado no site e no servidor de pagamento). */
+export const guidesTotal = (count) => {
+  let best = count * guidePrice;
+  guideCombos.forEach((combo) => {
+    if (count >= combo.size) best = Math.min(best, combo.price + (count - combo.size) * guidePrice);
+    else best = Math.min(best, combo.price);
+  });
+  return count === 0 ? 0 : best;
+};
+
 // Exemplos reais de fichas de avaliação (nomes das pacientes ocultados).
 export const evaluations = [
   {

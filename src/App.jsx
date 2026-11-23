@@ -18,6 +18,7 @@ import {
   guideCombos,
   guidePrice,
   guides,
+  guidesTotal,
   includes,
   links,
   methodCompare,
@@ -147,7 +148,6 @@ function Hero({ ready }) {
                 <svg viewBox="0 0 120 70"><path d="M6 12c40-12 84 0 104 40M92 40l18 14 2-22" /></svg>
               </p>
             </div>
-            <span className="hs__chip" aria-hidden="true"><Icon name="chart" /> Bioimpedância inclusa</span>
             <span className="hs__plate" aria-hidden="true"><img src={sampleMenu[1].image} alt="" /></span>
             <img className="hs__photo" src="/assets/anderson-cutout-clean.png" alt="Anderson Oliveira, nutricionista" fetchPriority="high" />
             <div className="hs__badge">
@@ -991,17 +991,10 @@ function Results() {
   );
 }
 
-const guidesTotal = (count) => {
-  let best = count * guidePrice;
-  guideCombos.forEach((combo) => {
-    if (count >= combo.size) best = Math.min(best, combo.price + (count - combo.size) * guidePrice);
-    else best = Math.min(best, combo.price);
-  });
-  return count === 0 ? 0 : best;
-};
-
 function Store() {
   const [cart, setCart] = useState([]);
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState("");
   const shelfRef = useRef(null);
   const toggle = (id) => setCart((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   const selectAll = () => setCart(guides.map((guide) => guide.id));
@@ -1018,6 +1011,24 @@ function Store() {
   else if (total < full) cartHint = `Combo aplicado: economia de ${money(full - total)}`;
   const chosen = guides.filter((guide) => cart.includes(guide.id));
   const message = `Quero comprar ${count === guides.length ? "a coleção completa de guias" : `${count} guia${count > 1 ? "s" : ""}`}: ${chosen.map((guide) => guide.title).join(", ")}. Total: ${money(total)}.`;
+  // Cria o pagamento no servidor (o preço é recalculado lá) e leva para a página do Mercado Pago.
+  const pay = async () => {
+    setPaying(true);
+    setPayError("");
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ guides: cart }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.url) throw new Error(data.error);
+      window.location.href = data.url;
+    } catch {
+      setPayError("O pagamento online não está disponível agora. Você pode finalizar pelo WhatsApp.");
+      setPaying(false);
+    }
+  };
   const maxOff = Math.round((1 - guideCombos[guideCombos.length - 1].price / (guides.length * guidePrice)) * 100);
   const stack = ["doces-fitness", "industrializados", "temperos"];
 
@@ -1030,7 +1041,7 @@ function Store() {
             <SplitTitle lines={["Conhecimento para", "*levar para casa."]} />
             <p data-reveal>Guias práticos em PDF, escritos por mim, para usar na cozinha, no mercado e no fim de semana. Cada um sai por {money(guidePrice)} — em combo, fica ainda mais em conta.</p>
             <ul className="store__perks" data-reveal>
-              <li><Icon name="chat" /> Envio pelo WhatsApp</li>
+              <li><Icon name="chat" /> Download logo após o pagamento</li>
               <li><Icon name="book" /> Leia no celular ou imprima</li>
               <li><Icon name="star" /> Até {maxOff}% off nos combos</li>
             </ul>
@@ -1101,14 +1112,17 @@ function Store() {
               {money(total)}
               {total < full && <s>{money(full)}</s>}
             </strong>
-            <small>{cartHint}</small>
+            <small>{payError || cartHint}</small>
           </div>
         </div>
         <div className="cart__actions">
           <button type="button" className="cart__clear" onClick={() => setCart([])}>Limpar</button>
-          <a className="btn btn--coral" href={whatsappLink(message)} target="_blank" rel="noopener noreferrer">
-            Comprar pelo WhatsApp <Arrow />
+          <a className="cart__whats" href={whatsappLink(message)} target="_blank" rel="noopener noreferrer" aria-label="Comprar pelo WhatsApp">
+            <WhatsappIcon />
           </a>
+          <button type="button" className="btn btn--coral cart__pay" onClick={pay} disabled={paying}>
+            {paying ? "Abrindo pagamento…" : <>Pagar com Pix ou cartão <Arrow /></>}
+          </button>
         </div>
       </div>
     </section>
@@ -1257,6 +1271,87 @@ function FloatingWhatsapp() {
   );
 }
 
+/** Retorno do Mercado Pago: confirma o pagamento no servidor e mostra os downloads. */
+function OrderReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const back = params.get("pagamento");
+  const paymentId = params.get("payment_id") || params.get("collection_id");
+  const [state, setState] = useState(back ? { loading: Boolean(paymentId) } : null);
+
+  const check = async () => {
+    if (!paymentId) return;
+    setState({ loading: true });
+    try {
+      const response = await fetch(`/api/order?payment_id=${encodeURIComponent(paymentId)}`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+      setState(data);
+    } catch (error) {
+      setState({ error: error.message || "Não foi possível confirmar o pagamento." });
+    }
+  };
+
+  useEffect(() => {
+    if (back) check();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const open = Boolean(state);
+  useEffect(() => {
+    if (!open) return undefined;
+    setScrollLocked(true);
+    return () => setScrollLocked(false);
+  }, [open]);
+
+  if (!state) return null;
+  const close = () => {
+    window.history.replaceState(null, "", window.location.pathname);
+    setState(null);
+  };
+
+  const pending = state.status === "pending" || state.status === "in_process";
+  let title = "Confirmando seu pagamento…";
+  let text = "Só um instante.";
+  if (state.status === "approved") {
+    title = "Pagamento aprovado!";
+    text = state.email ? `Seus guias estão liberados. Também enviamos os links para ${state.email}.` : "Seus guias estão liberados. Baixe agora:";
+  } else if (pending || (back === "pendente" && !state.loading)) {
+    title = "Pagamento em análise";
+    text = "Assim que o Mercado Pago confirmar (no Pix costuma ser na hora), seus guias são liberados aqui e por e-mail.";
+  } else if (back === "falhou" || state.status === "rejected" || state.status === "cancelled") {
+    title = "O pagamento não foi concluído";
+    text = "Nenhum valor foi cobrado. Você pode tentar de novo ou finalizar pelo WhatsApp.";
+  } else if (state.error) {
+    title = "Não conseguimos confirmar agora";
+    text = `${state.error} Se o valor foi cobrado, fale com o Anderson pelo WhatsApp informando o número do pagamento${paymentId ? ` ${paymentId}` : ""}.`;
+  }
+
+  return (
+    <div className="order" role="dialog" aria-modal="true" aria-labelledby="order-title">
+      <div className="order__card">
+        <button type="button" className="order__close" onClick={close} aria-label="Fechar">✕</button>
+        <span className="order__icon" aria-hidden="true">{state.status === "approved" ? "✓" : state.loading ? "…" : "!"}</span>
+        <h2 id="order-title">{title}</h2>
+        <p>{text}</p>
+        {state.downloads?.length > 0 && (
+          <ul className="order__list">
+            {state.downloads.map((item) => (
+              <li key={item.id}>
+                <span>{item.title}</span>
+                <a className="btn btn--coral" href={item.url}>Baixar PDF</a>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="order__actions">
+          {pending && <button type="button" className="btn btn--line" onClick={check}>Verificar de novo</button>}
+          <a className="btn btn--line" href={whatsappLink(`Comprei guias pelo site. Pagamento ${paymentId || ""}.`)} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [ready, setReady] = useState(false);
   useRevealAll();
@@ -1293,6 +1388,7 @@ export default function App() {
       </main>
       <Footer />
       <FloatingWhatsapp />
+      <OrderReturn />
     </>
   );
 }

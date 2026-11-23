@@ -1845,3 +1845,25 @@ html, body { overflow-x: clip; }
 @media (min-width: 901px) and (max-width: 1200px) { .hs__hello { left: -10%; top: 22%; } }
 @media (max-width: 900px) { .hs__hello { bottom: auto; left: -4%; top: 16%; } }
 @media (max-width: 900px) { .hs__hello { font-size: 19px; left: -2%; max-width: 96px; top: 14%; } .hs__hello svg { height: 30px; margin-left: 30%; width: 54px; } }
+
+/* Carrinho: pagamento online */
+.cart__whats { align-items: center; border: 1px solid rgba(255,255,255,.3); border-radius: 50%; color: white; display: inline-flex; flex: none; height: 46px; justify-content: center; transition: background .3s, border-color .3s; width: 46px; }
+.cart__whats:hover { background: #25d366; border-color: #25d366; }
+.cart__whats svg { height: 22px; width: 22px; }
+.cart__pay { border: 0; cursor: pointer; }
+.cart__pay:disabled { cursor: wait; opacity: .7; }
+
+/* Retorno do pagamento */
+.order { align-items: center; background: rgba(8,22,19,.6); display: flex; inset: 0; justify-content: center; padding: 20px; position: fixed; z-index: 300; }
+.order__card { animation: fade-up .4s var(--ease-out); background: var(--paper); border-radius: 28px; box-shadow: 0 40px 80px rgba(0,0,0,.25); max-height: 90vh; max-width: 520px; overflow: auto; padding: 36px 32px 30px; position: relative; text-align: center; width: 100%; }
+.order__close { background: var(--sand); border: 0; border-radius: 50%; cursor: pointer; height: 40px; position: absolute; right: 14px; top: 14px; width: 40px; }
+.order__icon { align-items: center; background: var(--sage-soft); border-radius: 50%; color: var(--forest); display: inline-flex; font-size: 28px; font-weight: 700; height: 64px; justify-content: center; margin-bottom: 14px; width: 64px; }
+.order__card h2 { font-size: clamp(30px, 4vw, 40px); margin-bottom: 10px; }
+.order__card > p { color: var(--muted); margin: 0 auto 22px; max-width: 400px; }
+.order__list { display: grid; gap: 10px; list-style: none; margin: 0 0 22px; padding: 0; text-align: left; }
+.order__list li { align-items: center; background: var(--sand); border-radius: 16px; display: flex; gap: 12px; justify-content: space-between; padding: 10px 10px 10px 16px; }
+.order__list span { font-weight: 600; }
+.order__list .btn { flex: none; font-size: 13px; padding: 10px 16px; }
+.order__actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.order__actions .btn { font-size: 14px; padding: 12px 18px; }
+@media (max-width: 600px) { .cart__pay { font-size: 14px; padding: 14px 16px; } }
