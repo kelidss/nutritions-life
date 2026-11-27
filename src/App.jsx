@@ -625,8 +625,32 @@ const consultCount = (label) => {
 };
 const money = (value) => `R$ ${value.toLocaleString("pt-BR")}`;
 
+/** Cria o pagamento no servidor (o valor é recalculado lá) e leva para a página do Mercado Pago. */
+async function startCheckout(body) {
+  const response = await fetch("/api/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || !data.url) throw new Error(data.error || "Pagamento indisponível.");
+  window.location.href = data.url;
+}
+
 function PlanCard({ plan, index }) {
   const [choice, setChoice] = useState(plan.featured ? 2 : 0);
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState("");
+  const pay = async () => {
+    setPaying(true);
+    setPayError("");
+    try {
+      await startCheckout({ plan: index, package: choice });
+    } catch {
+      setPayError("O pagamento online não está disponível agora. Fale pelo WhatsApp.");
+      setPaying(false);
+    }
+  };
   const [label, price] = plan.packages[choice];
   const total = toNumber(price);
   const count = consultCount(label);
@@ -662,8 +686,12 @@ function PlanCard({ plan, index }) {
         {plan.features.map((feature) => <li key={feature}>{feature}</li>)}
       </ul>
 
-      <a className="btn btn--block" href={whatsappLink(`Tenho interesse no plano ${plan.title} (${label} – ${price}).`)} target="_blank" rel="noopener noreferrer">
-        Quero este plano <Arrow />
+      <button type="button" className="btn btn--block plan__pay" onClick={pay} disabled={paying}>
+        {paying ? "Abrindo pagamento…" : <>Pagar com Pix ou cartão <Arrow /></>}
+      </button>
+      {payError && <p className="plan__error" role="alert">{payError}</p>}
+      <a className="plan__whats" href={whatsappLink(`Tenho interesse no plano ${plan.title} (${label} – ${price}).`)} target="_blank" rel="noopener noreferrer">
+        <WhatsappIcon /> Prefiro falar no WhatsApp
       </a>
     </article>
   );
@@ -676,7 +704,7 @@ function Plans() {
         <div className="sec-head sec-head--center">
           <SectionLabel>planos e valores</SectionLabel>
           <SplitTitle lines={["Seu cuidado,", "*do seu jeito."]} />
-          <p data-reveal>Escolha o formato e o pacote — o valor por consulta e a economia aparecem na hora.</p>
+          <p data-reveal>Escolha o formato e o pacote — o valor por consulta e a economia aparecem na hora. Pague com Pix ou cartão em até 12x e depois combine a data pelo WhatsApp.</p>
         </div>
         <div className="plans__grid">
           {plans.map((plan, index) => <PlanCard plan={plan} index={index} key={plan.title} />)}
@@ -1016,14 +1044,7 @@ function Store() {
     setPaying(true);
     setPayError("");
     try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ guides: cart }),
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data.url) throw new Error(data.error);
-      window.location.href = data.url;
+      await startCheckout({ guides: cart });
     } catch {
       setPayError("O pagamento online não está disponível agora. Você pode finalizar pelo WhatsApp.");
       setPaying(false);
@@ -1312,7 +1333,10 @@ function OrderReturn() {
   const pending = state.status === "pending" || state.status === "in_process";
   let title = "Confirmando seu pagamento…";
   let text = "Só um instante.";
-  if (state.status === "approved") {
+  if (state.status === "approved" && state.kind === "plano") {
+    title = "Pagamento aprovado!";
+    text = `Seu plano ${state.plan.title} (${state.plan.label}) está pago. Agora é só combinar a data da consulta com o Anderson pelo WhatsApp.`;
+  } else if (state.status === "approved") {
     title = "Pagamento aprovado!";
     text = state.email ? `Seus guias estão liberados. Também enviamos os links para ${state.email}.` : "Seus guias estão liberados. Baixe agora:";
   } else if (pending || (back === "pendente" && !state.loading)) {
@@ -1345,7 +1369,13 @@ function OrderReturn() {
         )}
         <div className="order__actions">
           {pending && <button type="button" className="btn btn--line" onClick={check}>Verificar de novo</button>}
-          <a className="btn btn--line" href={whatsappLink(`Comprei guias pelo site. Pagamento ${paymentId || ""}.`)} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+          {state.kind === "plano" && state.status === "approved" ? (
+            <a className="btn btn--coral" href={whatsappLink(`Paguei o plano ${state.plan.title} (${state.plan.label}) pelo site. Pagamento ${paymentId}. Quero agendar minha consulta.`)} target="_blank" rel="noopener noreferrer">
+              <WhatsappIcon /> Agendar pelo WhatsApp
+            </a>
+          ) : (
+            <a className="btn btn--line" href={whatsappLink(`Fiz um pagamento pelo site. Pagamento ${paymentId || ""}.`)} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+          )}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 // Utilitários compartilhados pelas funções de servidor (Vercel /api e servidor local do Vite).
 import crypto from "node:crypto";
-import { guides, guidesTotal } from "../../src/data/content.js";
+import { guides, guidesTotal, plans } from "../../src/data/content.js";
 
 const MP_API = "https://api.mercadopago.com";
 
@@ -45,6 +45,21 @@ export function priceGuides(ids) {
   return { guides: chosen, total: guidesTotal(chosen.length) };
 }
 
+/** Valida plano + pacote e devolve o valor total do pacote (calculado no servidor). */
+export function pricePlan(planIndex, packageIndex) {
+  const plan = plans[Number(planIndex)];
+  const option = plan?.packages[Number(packageIndex)];
+  if (!plan || !option) throw new Error("Plano não encontrado.");
+  const [label, price] = option;
+  return { plan, label, price, total: Number(String(price).replace(/\D/g, "")) };
+}
+
+export function planFromReference(reference) {
+  const match = String(reference || "").match(/^plano:(\d+):(\d+)$/);
+  if (!match) return null;
+  try { return pricePlan(match[1], match[2]); } catch { return null; }
+}
+
 export function guidesFromReference(reference) {
   return String(reference || "")
     .replace(/^guias:/, "")
@@ -73,8 +88,9 @@ export async function mercadoPago(path, options = {}) {
   return data;
 }
 
+/** Modo teste: MP_ENV=test (credenciais de conta de teste começam com APP_USR- também) ou token antigo TEST-. */
 export function isTestToken() {
-  return env("MP_ACCESS_TOKEN").startsWith("TEST-");
+  return env("MP_ENV") === "test" || env("MP_ACCESS_TOKEN").startsWith("TEST-");
 }
 
 // ------------------------------------------------------------------ links de download assinados
